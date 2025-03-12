@@ -22,4 +22,7 @@ public class TonKho {
     @ManyToOne
     @JoinColumn
     private Kho kho;
+    @ManyToOne
+    @JoinColumn
+    private SanPham sanPham;
 }
