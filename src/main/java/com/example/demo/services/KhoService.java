@@ -1,9 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.dto.KhoDTO;
-import com.example.demo.dto.PhieuNhapDTO;
-import com.example.demo.dto.TonKhoCreateDTO;
-import com.example.demo.dto.TonKhoDTO;
+import com.example.demo.dto.*;
 import com.example.demo.entities.Kho;
 import com.example.demo.entities.SanPham;
 import com.example.demo.entities.TonKho;
@@ -57,10 +54,6 @@ public class KhoService {
         return tonKhoRepository.findTonKhoByKhoAndSanPham(kho, sanPham);
     }
 
-    private Boolean chechExistsTonkho(Integer maTonKho){
-        return tonKhoRepository.findById(maTonKho).isPresent();
-    }
-
     public KhoDTO capNhatTonKhoTuPhieuNhap(PhieuNhapDTO phieuNhapDTO){
         Integer maCuaHang = khoRepository.findCuaHangByPhieuNhap(phieuNhapDTO.getMa());
 
@@ -90,6 +83,18 @@ public class KhoService {
 
     }
 
+    public TonKhoDTO capNhatSoLuongTonKho(TonkhoUpdateDTO tonkhoUpdateDTO){
+        TonKho tonKho = getTonKhoById(tonkhoUpdateDTO.getMa());
+
+        if(tonKho!=null){
+            tonKho.setSoLuong(tonkhoUpdateDTO.getSoLuong());
+            tonKhoRepository.save(tonKho);
+        }else{
+            throw new RuntimeException("ton kho not found");
+        }
+        return khoMapper.toToKhoDTO(tonKho);
+    }
+
     public Page<KhoDTO> getAllKho(int page, int size){
         Page<Kho> pageKho = khoRepository.findAll(PageRequest.of(page, size));
 
@@ -110,23 +115,6 @@ public class KhoService {
                .map(khoMapper::toToKhoDTO)
                .collect(Collectors.toList());
         return khoMapper.toKhoDTO(kho, tonKhoDTOS);
-    }
-
-    public TonKhoDTO taoTonKho(TonKhoCreateDTO tonKhoCreateDTO){
-        TonKho tonKho = new TonKho();
-        tonKho.setMa(getGenerationId());
-        tonKho.setSoLuong(tonKhoCreateDTO.getSoLuong());
-        tonKho.setKho(getKhoById(tonKhoCreateDTO.getMaKho()));
-        tonKho.setSanPham(sanPhamRepository.findById(tonKhoCreateDTO.getMaSanPham())
-               .orElseThrow(() -> new RuntimeException("san pham not found")));
-
-        tonKhoRepository.save(tonKho);
-
-        return TonKhoDTO.builder()
-                .ma(tonKho.getMa())
-                .soLuong(tonKho.getSoLuong())
-                .tenSanPham(tonKho.getSanPham().getTenSanPham())
-                .build();
     }
 
     private Integer getGenerationId() {
