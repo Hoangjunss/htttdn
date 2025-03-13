@@ -4,10 +4,12 @@ import com.example.demo.dto.*;
 import com.example.demo.entities.*;
 import com.example.demo.mapper.PhieuNhapKhoMapper;
 import com.example.demo.repositories.*;
+import com.example.demo.specification.PhieuNhapSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -186,6 +188,10 @@ public class PhieuNhapService {
     private Integer getGenerationId() {
         UUID uuid = UUID.randomUUID();
         return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
+    }
+    public Page<PhieuNhapKho> searchPhieuNhapKho(Integer maNhanVien, Integer thang, Integer nam, Integer maNhaCungCap, Pageable pageable) {
+        Specification<PhieuNhapKho> spec = PhieuNhapSpecification.filter(maNhanVien, thang, nam, maNhaCungCap);
+        return phieuNhapKhoRepository.findAll(spec, pageable);
     }
 
 
