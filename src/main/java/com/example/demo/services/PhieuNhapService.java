@@ -25,6 +25,7 @@ public class PhieuNhapService {
     private final NhanVienRepository nhanVienRepository;
     private final SanPhamRepository sanPhamRepository;
     private final PhieuNhapKhoMapper phieuNhapKhoMapper;
+    private final KhoService khoService;
 
     @Autowired
     public PhieuNhapService(PhieuNhapKhoRepository phieuNhapKhoRepository,
@@ -32,13 +33,15 @@ public class PhieuNhapService {
                             NhaCungCapRepository nhaCungCapRepository,
                             NhanVienRepository nhanVienRepository,
                             SanPhamRepository sanPhamRepository,
-                            PhieuNhapKhoMapper phieuNhapKhoMapper) {
+                            PhieuNhapKhoMapper phieuNhapKhoMapper,
+                            KhoService khoService) {
         this.chiTietPhieuNhapRepository = chiTietPhieuNhapRepository;
         this.phieuNhapKhoRepository = phieuNhapKhoRepository;
         this.nhaCungCapRepository = nhaCungCapRepository;
         this.nhanVienRepository = nhanVienRepository;
         this.sanPhamRepository = sanPhamRepository;
         this.phieuNhapKhoMapper = phieuNhapKhoMapper;
+        this.khoService = khoService;
     }
 
     public PhieuNhapDTO taoPhieuNhap(PhieuNhapCreateDTO phieuNhapCreateDTO){
@@ -75,7 +78,11 @@ public class PhieuNhapService {
 
         chiTietPhieuNhapRepository.saveAll(chiTietPhieuNhaps);
 
-        return phieuNhapKhoMapper.toPhieuNhapDTO(phieuNhapKho1, chiTietPhieuNhaps);
+        PhieuNhapDTO phieuNhapDTO = phieuNhapKhoMapper.toPhieuNhapDTO(phieuNhapKho1, chiTietPhieuNhaps);
+
+        khoService.capNhatTonKhoTuPhieuNhap(phieuNhapDTO);
+
+        return phieuNhapDTO;
     }
 
     public PhieuNhapDTO updatePhieuNhap(PhieuNhapUpdateDTO phieuNhapUpdateDTO){
@@ -105,7 +112,7 @@ public class PhieuNhapService {
     }
 
     public PhieuNhapDTO updateChiTietPhieuNhap(List<ChiTietPhieuNhapUpdateDTO> chiTietPhieuNhapUpdateDTOS){
-        Double tongTien = 0D;
+        double tongTien = 0D;
         List<ChiTietPhieuNhapDTO> chiTietPhieuNhapDTOS = chiTietPhieuNhapUpdateDTOS
                 .stream()
                 .map(chiTietPhieuNhapUpdateDTO -> {
@@ -137,7 +144,8 @@ public class PhieuNhapService {
         phieuNhapKho.setTongGiaNhap(tongTien);
         phieuNhapKhoRepository.save(phieuNhapKho);
 
-        return PhieuNhapDTO.builder()
+
+        PhieuNhapDTO phieuNhapDTO = PhieuNhapDTO.builder()
                 .ma(phieuNhapKho.getMa())
                 .tongGiaNhap(phieuNhapKho.getTongGiaNhap())
                 .thoiGianNhap(phieuNhapKho.getThoiGianNhap())
@@ -145,6 +153,10 @@ public class PhieuNhapService {
                 .tenNhaCungCap(phieuNhapKho.getNhaCungCap().getTenNhaCungCap())
                 .chiTietPhieuNhaps(chiTietPhieuNhapDTOS)
                 .build();
+
+        khoService.capNhatTonKhoTuPhieuNhap(phieuNhapDTO);
+
+        return phieuNhapDTO;
     }
 
     public Page<PhieuNhapDTO> getAllPhieuNhap(int page, int size) {

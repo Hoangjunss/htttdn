@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChiTietPhieuNhapDTO {
+public class TonkhoUpdateDTO {
     private Integer ma;
-    private Double giaNhap;
-    private Double giaBan;
     private Integer soLuong;
-    private String tenSanPhamDTO;
+    private Integer maKho;
     private Integer maSanPham;
 }

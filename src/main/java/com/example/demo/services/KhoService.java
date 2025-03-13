@@ -1,0 +1,136 @@
+package com.example.demo.services;
+
+import com.example.demo.dto.KhoDTO;
+import com.example.demo.dto.PhieuNhapDTO;
+import com.example.demo.dto.TonKhoCreateDTO;
+import com.example.demo.dto.TonKhoDTO;
+import com.example.demo.entities.Kho;
+import com.example.demo.entities.SanPham;
+import com.example.demo.entities.TonKho;
+import com.example.demo.mapper.KhoMapper;
+import com.example.demo.repositories.KhoRepository;
+import com.example.demo.repositories.SanPhamRepository;
+import com.example.demo.repositories.TonKhoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+public class KhoService {
+    private final KhoRepository khoRepository;
+    private final TonKhoRepository tonKhoRepository;
+    private final SanPhamRepository sanPhamRepository;
+    private final KhoMapper khoMapper;
+
+    @Autowired
+    public KhoService(KhoRepository khoRepository,
+                      TonKhoRepository tonKhoRepository,
+                      SanPhamRepository sanPhamRepository,
+                      KhoMapper khoMapper) {
+        this.khoRepository = khoRepository;
+        this.tonKhoRepository = tonKhoRepository;
+        this.sanPhamRepository = sanPhamRepository;
+        this.khoMapper = khoMapper;
+    }
+
+    private Kho getKhoById(Integer maKho){
+        return khoRepository.findById(maKho)
+                .orElseThrow(()-> new RuntimeException("kho not found"));
+    }
+
+    private SanPham getSanPhamById(Integer maSanPham){
+        return sanPhamRepository.findById(maSanPham)
+                .orElseThrow(()-> new RuntimeException("san pham not found"));
+    }
+
+    private TonKho getTonKhoById(Integer maTonKho){
+        return tonKhoRepository.findById(maTonKho)
+                .orElseThrow(()-> new RuntimeException("ton kho not found"));
+    }
+
+    private TonKho getTonKhoByKhoAndSP(Kho kho, SanPham sanPham){
+        return tonKhoRepository.findTonKhoByKhoAndSanPham(kho, sanPham);
+    }
+
+    private Boolean chechExistsTonkho(Integer maTonKho){
+        return tonKhoRepository.findById(maTonKho).isPresent();
+    }
+
+    public KhoDTO capNhatTonKhoTuPhieuNhap(PhieuNhapDTO phieuNhapDTO){
+        Integer maCuaHang = khoRepository.findCuaHangByPhieuNhap(phieuNhapDTO.getMa());
+
+        Kho kho = khoRepository.findKhoByMaCuaHang(maCuaHang);
+
+        List<TonKhoDTO> tonKhoDTOS = phieuNhapDTO.getChiTietPhieuNhaps()
+                .stream()
+                .map(pn -> {
+                    SanPham sanPham = getSanPhamById(pn.getMaSanPham());
+                    TonKho tonKho = getTonKhoByKhoAndSP(kho, sanPham);
+                    if(tonKho!=null){
+                        tonKho.setSoLuong(tonKho.getSoLuong() + pn.getSoLuong());
+                        tonKhoRepository.save(tonKho);
+                    }else{
+                        tonKho = TonKho.builder()
+                               .ma(getGenerationId())
+                               .soLuong(pn.getSoLuong())
+                               .kho(kho)
+                               .sanPham(sanPham)
+                               .build();
+                        tonKhoRepository.save(tonKho);
+                    }
+                    return khoMapper.toToKhoDTO(tonKho);
+                }).collect(Collectors.toList());
+
+        return khoMapper.toKhoDTO(kho, tonKhoDTOS);
+
+    }
+
+    public Page<KhoDTO> getAllKho(int page, int size){
+        Page<Kho> pageKho = khoRepository.findAll(PageRequest.of(page, size));
+
+        return pageKho.map(kho -> KhoDTO.builder()
+                        .ma(kho.getMa())
+                        .tenKho(kho.getTenKho())
+                        .diaChi(kho.getDiaChi())
+                        .maCuaHang(kho.getCuaHang().getMa())
+                        .tonKhoDTOS(null)
+                        .build()
+                );
+    }
+
+    public KhoDTO getKhoByMa(Integer maKho){
+        Kho kho = getKhoById(maKho);
+        List<TonKhoDTO> tonKhoDTOS = tonKhoRepository.findTonKhoByKho(kho)
+               .stream()
+               .map(khoMapper::toToKhoDTO)
+               .collect(Collectors.toList());
+        return khoMapper.toKhoDTO(kho, tonKhoDTOS);
+    }
+
+    public TonKhoDTO taoTonKho(TonKhoCreateDTO tonKhoCreateDTO){
+        TonKho tonKho = new TonKho();
+        tonKho.setMa(getGenerationId());
+        tonKho.setSoLuong(tonKhoCreateDTO.getSoLuong());
+        tonKho.setKho(getKhoById(tonKhoCreateDTO.getMaKho()));
+        tonKho.setSanPham(sanPhamRepository.findById(tonKhoCreateDTO.getMaSanPham())
+               .orElseThrow(() -> new RuntimeException("san pham not found")));
+
+        tonKhoRepository.save(tonKho);
+
+        return TonKhoDTO.builder()
+                .ma(tonKho.getMa())
+                .soLuong(tonKho.getSoLuong())
+                .tenSanPham(tonKho.getSanPham().getTenSanPham())
+                .build();
+    }
+
+    private Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
+    }
+}

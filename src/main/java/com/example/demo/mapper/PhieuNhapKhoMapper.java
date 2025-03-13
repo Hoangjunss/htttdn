@@ -30,6 +30,7 @@ public class PhieuNhapKhoMapper {
                 .giaBan(chiTietPhieuNhap.getGiaBan())
                 .soLuong(chiTietPhieuNhap.getSoLuong())
                 .tenSanPhamDTO(chiTietPhieuNhap.getSanPham().getTenSanPham())
+                .maSanPham(chiTietPhieuNhap.getSanPham().getMa())
                 .build();
     }
 
