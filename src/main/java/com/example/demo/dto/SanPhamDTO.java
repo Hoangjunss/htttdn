@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import com.example.demo.entities.SanPham;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 @Data

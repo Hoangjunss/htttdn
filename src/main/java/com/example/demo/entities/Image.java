@@ -9,31 +9,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class DonHang {
+public class Image {
     @Id
-    private Integer ma;
-    private LocalDateTime thoiGianBan;
-    private Double tongGiaTri;
-    private Double giaGiam;
-    private String trangThai;
-    private String phuongThuc;
+    private Integer id;
+    private String url;
 
     @ManyToOne
     @JoinColumn
     private SanPham sanPham;
-
-    @ManyToOne
-    @JoinColumn
-    private NhanVien nhanVien;
-
-    @ManyToOne
-    @JoinColumn
-    private CuaHang cuaHang;
 }
