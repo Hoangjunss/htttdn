@@ -1,12 +1,14 @@
 package com.example.demo.dto;
 
 import com.example.demo.entities.ChamCong;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
-@Data
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChamCongDTO {
     private Integer ma;
     private LocalDateTime thoiGianVao;
