@@ -20,16 +20,16 @@ public class TaiKhoanController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<TaiKhoanDTO>> signUp(@RequestBody TaiKhoanCreateDTO taiKhoanCreateDTO) {
+    public ResponseEntity<ApiResponses<TaiKhoanDTO>> signUp(@RequestBody TaiKhoanCreateDTO taiKhoanCreateDTO) {
         TaiKhoanDTO taiKhoanDTO = taiKhoanService.signUp(taiKhoanCreateDTO);
-        ApiResponse<TaiKhoanDTO> response = new ApiResponse<>(true, "Đăng ký thành công", taiKhoanDTO);
+        ApiResponses<TaiKhoanDTO> response = new ApiResponses<>(true, "Đăng ký thành công", taiKhoanDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<ApiResponse<AuthenticationDTO>> signIn(@RequestBody DangNhap dangNhap) {
+    public ResponseEntity<ApiResponses<AuthenticationDTO>> signIn(@RequestBody DangNhap dangNhap) {
         AuthenticationDTO authenticationDTO = taiKhoanService.signIn(dangNhap);
-        ApiResponse<AuthenticationDTO> response = new ApiResponse<>(true, "Đăng nhập thành công", authenticationDTO);
+        ApiResponses<AuthenticationDTO> response = new ApiResponses<>(true, "Đăng nhập thành công", authenticationDTO);
         return ResponseEntity.ok(response);
     }
 
