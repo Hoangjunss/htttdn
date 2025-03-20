@@ -43,9 +43,9 @@ public class WebSecurityConfiguration {
                                            CorsConfigurationSource corsConfigurationSource) throws Exception{
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
-                .authorizeHttpRequests((auth) -> auth.requestMatchers(
-                        "/users/register",
-                        "/users/login").permitAll()
+                .authorizeHttpRequests((auth) -> auth    .requestMatchers("/**",  "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html").permitAll()
                         .anyRequest()
                         .authenticated()
                 ).httpBasic(withDefaults())
