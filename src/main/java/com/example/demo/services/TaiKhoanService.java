@@ -24,13 +24,13 @@ public class TaiKhoanService {
     private final TaiKhoanRepository taiKhoanRepository;
     private final TaiKhoanMapper taiKhoanMapper;
     private final RoleService roleService;
-    private final NhanVienSerivce nhanVienSerivce;
+   private NhanVienService nhanVienSerivce;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
     public TaiKhoanService(TaiKhoanRepository taiKhoanRepository,
-                           NhanVienSerivce nhanVienSerivce,
+                           NhanVienService nhanVienSerivce,
                            RoleService roleService,
                            TaiKhoanMapper taiKhoanMapper,
                            PasswordEncoder passwordEncoder,
