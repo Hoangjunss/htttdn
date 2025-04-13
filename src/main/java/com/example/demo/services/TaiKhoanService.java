@@ -53,7 +53,7 @@ public class TaiKhoanService {
         taiKhoan.setMa(getGenerationId());
         taiKhoan.setTenDangNhap(taiKhoanCreateDTO.getTenDangNhap());
         taiKhoan.setMatKhau(passwordEncoder.encode(taiKhoanCreateDTO.getMatKhau()));
-        taiKhoan.setQuyen(taiKhoanCreateDTO.getQuyen());
+        taiKhoan.setTrangThai(true);
         taiKhoan.setThoiGianTao(LocalDateTime.now());
         taiKhoan.setRole(role);
         taiKhoan.setNhanVien(nhanVien);

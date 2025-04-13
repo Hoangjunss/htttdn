@@ -52,8 +52,8 @@ public class SanPhamService {
                 .orElseThrow(() -> new RuntimeException("Loại sản phẩm không tồn tại")));
         sanPham.setSize(sizeRepository.findById(dto.getSizeId())
                 .orElseThrow(() -> new RuntimeException("Size không tồn tại")));
-        sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
-                .orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
+        //sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
+                //.orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
 
         return sanPhamRepository.save(sanPham);
     }
@@ -73,8 +73,8 @@ public class SanPhamService {
                 .orElseThrow(() -> new RuntimeException("Loại sản phẩm không tồn tại")));
         sanPham.setSize(sizeRepository.findById(dto.getSizeId())
                 .orElseThrow(() -> new RuntimeException("Size không tồn tại")));
-        sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
-                .orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
+        //sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
+                //.orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
 
         return sanPhamRepository.save(sanPham);
     }

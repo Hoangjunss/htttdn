@@ -12,11 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaiKhoanCreateDTO {
-    private LocalDateTime thoiGianTao;
     private String tenDangNhap;
     private String matKhau;
-    private String trangThai;
-    private String quyen;
     private Integer maNhanVien;
     private Integer roleId;
 }

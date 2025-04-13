@@ -32,7 +32,7 @@ public class SanPham {
     @JoinColumn
     private Size size;
 
-    @ManyToOne
-    @JoinColumn
-    private TonKho tonKho;
+    //@ManyToOne
+    //@JoinColumn
+    //private TonKho tonKho;
 }

@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class BangLuongService {
     private final BangLuongRepository bangLuongRepository;
@@ -36,6 +38,7 @@ public class BangLuongService {
         TaiKhoan account = (TaiKhoan) authentication.getPrincipal();
         NhanVien nhanVien =account.getNhanVien();
         BangLuong bangLuong = new BangLuong();
+        bangLuong.setMa(getGenerationId());
         bangLuong.setNhanVien(nhanVien);
         bangLuong.setThangTinhLuong(dto.getThangTinhLuong());
         bangLuong.setNamTinhluong(dto.getNamTinhluong());
@@ -45,7 +48,7 @@ public class BangLuongService {
         bangLuong.setQuyTinhLuong(dto.getQuyTinhLuong());
         bangLuong.setKhauTru(dto.getKhauTru());
         bangLuong.setThucNhan(tinhThucNhan(dto));
-
+        System.out.println(bangLuong);
         return bangLuongRepository.save(bangLuong);
     }
 
@@ -66,5 +69,10 @@ public class BangLuongService {
 
     private Double tinhThucNhan(BangLuongDTO dto) {
         return dto.getLuongCoBan() + (dto.getTongHoaHong() * 1.0) - dto.getKhauTru();
+    }
+
+    private Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }

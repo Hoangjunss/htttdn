@@ -1,9 +1,6 @@
 package com.example.demo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +31,7 @@ public class TaiKhoan implements UserDetails {
     @JoinColumn
     private NhanVien nhanVien;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private Role role;
 

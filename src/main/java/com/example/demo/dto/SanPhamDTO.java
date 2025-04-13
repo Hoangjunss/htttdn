@@ -34,6 +34,6 @@ public class SanPhamDTO {
         this.ngayTao = sanPham.getNgayTao();
         this.loaiSanPhamId = sanPham.getLoaiSanPham().getMa();
         this.sizeId = sanPham.getSize().getMa();
-        this.tonKhoId = sanPham.getTonKho().getMa();
+        //this.tonKhoId = sanPham.getTonKho().getMa();
     }
 }
