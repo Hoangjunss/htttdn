@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 
@@ -41,7 +42,6 @@ public class NhanVienService {
 
     public NhanVienDTO createNhanVien(NhanVienCreateDTO dto) {
         NhanVien nhanVien = new NhanVien();
-
         mapFromCreateDTO(nhanVien, dto);
 
         nhanVienRepository.save(nhanVien);
@@ -62,6 +62,7 @@ public class NhanVienService {
     // =============================
 
     private void mapFromCreateDTO(NhanVien nv, NhanVienCreateDTO dto) {
+        nv.setMa(getGenerationId());
         nv.setHoTen(dto.getHoTen());
         nv.setNgaySinh(String.valueOf(LocalDate.parse(dto.getNgaySinh())));
         nv.setGioiTinh(dto.getGioiTinh());
@@ -91,7 +92,7 @@ public class NhanVienService {
 
     private NhanVienDTO mapToDTO(NhanVien nv) {
         NhanVienDTO dto = new NhanVienDTO();
-        dto.setMa(nv.getMa());
+        dto.setMa(getGenerationId());
         dto.setHoTen(nv.getHoTen());
         dto.setNgaySinh(nv.getNgaySinh().toString());
         dto.setGioiTinh(nv.getGioiTinh());
@@ -109,5 +110,10 @@ public class NhanVienService {
 
         dto.setCuaHangDTO(chDTO);
         return dto;
+    }
+
+    private Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }

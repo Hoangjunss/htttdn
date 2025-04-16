@@ -24,7 +24,7 @@ public class SanPham {
     private String trangThai;
     private LocalDateTime ngayTao;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private LoaiSanPham loaiSanPham;
 
