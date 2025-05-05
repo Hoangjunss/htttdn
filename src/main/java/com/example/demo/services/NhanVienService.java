@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 
@@ -63,7 +62,6 @@ public class NhanVienService {
     // =============================
 
     private void mapFromCreateDTO(NhanVien nv, NhanVienCreateDTO dto) {
-        nv.setMa(getGenerationId());
         nv.setHoTen(dto.getHoTen());
         nv.setNgaySinh(String.valueOf(LocalDate.parse(dto.getNgaySinh())));
         nv.setGioiTinh(dto.getGioiTinh());
@@ -111,10 +109,5 @@ public class NhanVienService {
 
         dto.setCuaHangDTO(chDTO);
         return dto;
-    }
-    public Integer getGenerationId() {
-        UUID uuid = UUID.randomUUID();
-        // Use most significant bits and ensure it's within the integer range
-        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }

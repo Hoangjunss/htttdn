@@ -56,8 +56,14 @@ public class SanPhamService {
                 .orElseThrow(() -> new RuntimeException("Size không tồn tại")));
         //sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
                 //.orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
+        System.out.print(sanPham);
 
         return sanPhamRepository.save(sanPham);
+    }
+
+    private Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 
     @Transactional
