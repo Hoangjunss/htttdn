@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ChamCongService {
@@ -30,6 +31,7 @@ public class ChamCongService {
         TaiKhoan account = (TaiKhoan) authentication.getPrincipal();
         NhanVien nhanVien =account.getNhanVien();
         ChamCong chamCong = new ChamCong();
+        chamCong.setMa(getGenerationId());
         chamCong.setNhanVien(nhanVien);
         chamCong.setThoiGianVao(LocalDateTime.now());
         chamCong.setTrangThai("Đã vào");
@@ -54,5 +56,10 @@ public class ChamCongService {
         Specification<ChamCong> spec = ChamCongSpecification.filterChamCong(nhanVienId, cuaHangId, ngay);
         Pageable pageable = PageRequest.of(page, size); // Phân trang
         return chamCongRepository.findAll(spec, pageable);
+    }
+    public Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        // Use most significant bits and ensure it's within the integer range
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }

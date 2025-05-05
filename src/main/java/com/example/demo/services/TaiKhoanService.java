@@ -73,9 +73,7 @@ public class TaiKhoanService {
         if (!passwordEncoder.matches(account.getPassword(), taiKhoan.getPassword())) {
             throw new RuntimeException("Passwords do not match");
         }
-        if (!taiKhoan.isAccountNonLocked()) {
-            throw new RuntimeException("Account is not locked");
-        }
+
         UserDetails userDetails = (UserDetails) taiKhoan;
 
         String jwtToken = jwtTokenUtil.generateToken(userDetails);

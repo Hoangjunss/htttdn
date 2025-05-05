@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SanPhamService {
@@ -41,6 +42,7 @@ public class SanPhamService {
     @Transactional
     public SanPham taoSanPham(SanPhamDTO dto) {
         SanPham sanPham = new SanPham();
+        sanPham.setMa(getGenerationId());
         sanPham.setTenSanPham(dto.getTenSanPham());
         sanPham.setHinhSanPham(dto.getHinhSanPham());
         sanPham.setGioiTinh(dto.getGioiTinh());
@@ -85,5 +87,10 @@ public class SanPhamService {
             throw new RuntimeException("Sản phẩm không tồn tại");
         }
         sanPhamRepository.deleteById(ma);
+    }
+    public Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        // Use most significant bits and ensure it's within the integer range
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }
