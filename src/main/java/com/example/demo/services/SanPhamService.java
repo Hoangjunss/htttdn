@@ -94,9 +94,5 @@ public class SanPhamService {
         }
         sanPhamRepository.deleteById(ma);
     }
-    public Integer getGenerationId() {
-        UUID uuid = UUID.randomUUID();
-        // Use most significant bits and ensure it's within the integer range
-        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
-    }
+
 }
