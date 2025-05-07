@@ -1,8 +1,10 @@
 package com.example.demo.services;
 
+import com.example.demo.entities.BangLuong;
 import com.example.demo.entities.ChamCong;
 import com.example.demo.entities.NhanVien;
 import com.example.demo.entities.TaiKhoan;
+import com.example.demo.repositories.BangLuongRepository;
 import com.example.demo.repositories.ChamCongRepository;
 import com.example.demo.specification.ChamCongSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import java.util.UUID;
 public class ChamCongService {
     @Autowired
     private ChamCongRepository chamCongRepository;
+    @Autowired
+    private BangLuongRepository bangLuongRepository;
 
     // Chấm công vào
     public ChamCong checkIn() {
@@ -38,11 +42,10 @@ public class ChamCongService {
         return chamCongRepository.save(chamCong);
     }
 
-    // Chấm công ra
     public ChamCong checkOut() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         TaiKhoan account = (TaiKhoan) authentication.getPrincipal();
-        NhanVien nhanVien =account.getNhanVien();
+        NhanVien nhanVien = account.getNhanVien();
         ChamCong chamCong = chamCongRepository.findByNhanVienAndThoiGianRaIsNull(nhanVien);
         chamCong.setThoiGianRa(LocalDateTime.now());
         long hoursWorked = Duration.between(chamCong.getThoiGianVao(), chamCong.getThoiGianRa()).toHours();
@@ -50,6 +53,38 @@ public class ChamCongService {
         chamCong.setTongGioLam(tongGioLam);
 
         chamCong.setTrangThai("Hoàn thành");
+
+        // Lấy tháng và năm hiện tại để tìm hoặc tạo bảng lương
+        LocalDateTime now = LocalDateTime.now();
+        Integer thangHienTai = now.getMonthValue();
+        Integer namHienTai = now.getYear();
+
+        // Tìm bảng lương của nhân viên trong tháng và năm hiện tại
+        BangLuong bangLuong = bangLuongRepository.findByNhanVienAndNamTinhluongAndThangTinhLuong(
+                nhanVien, namHienTai, thangHienTai);
+
+        if (bangLuong != null) {
+            Integer tongGioLamCu = bangLuong.getTongGioLam() != null ? bangLuong.getTongGioLam() : 0;
+            bangLuong.setTongGioLam(tongGioLamCu + tongGioLam);
+            bangLuong.setThucNhan(nhanVien.getLuongTheoGio()*(tongGioLamCu+tongGioLam) + bangLuong.getTongHoaHong());
+            bangLuongRepository.save(bangLuong);
+        } else {
+            BangLuong bangLuongMoi = new BangLuong();
+            bangLuongMoi.setMa(getGenerationId());
+            bangLuongMoi.setNhanVien(nhanVien);
+            bangLuongMoi.setThangTinhLuong(thangHienTai);
+            bangLuongMoi.setNamTinhluong(namHienTai);
+            bangLuongMoi.setTongGioLam(tongGioLam);
+
+            bangLuongMoi.setLuongCoBan(nhanVien.getLuongTheoGio()); // Sẽ được cập nhật sau
+            bangLuongMoi.setThucNhan(nhanVien.getLuongTheoGio()*tongGioLam);
+            bangLuongMoi.setTongHoaHong(0);
+            bangLuongMoi.setQuyTinhLuong(thangHienTai); // Mặc định là tháng hiện tại
+            bangLuongMoi.setKhauTru(0.0);
+
+            bangLuongRepository.save(bangLuongMoi);
+        }
+
         return chamCongRepository.save(chamCong);
     }
     public Page<ChamCong> timChamCong(Integer nhanVienId, Integer cuaHangId, LocalDate ngay, int page, int size) {
