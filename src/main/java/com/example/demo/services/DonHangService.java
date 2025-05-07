@@ -4,6 +4,8 @@ import com.example.demo.dto.ChiTietDonHangDTO;
 import com.example.demo.dto.DonHangCreateDTO;
 import com.example.demo.dto.DonHangDTO;
 import com.example.demo.entities.*;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.Error;
 import com.example.demo.repositories.*;
 import com.example.demo.specification.DonHangSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +47,9 @@ public class DonHangService {
     @Transactional
     public DonHangDTO save(DonHangCreateDTO dto) {
         NhanVien nhanVien = nhanVienRepository.findById(dto.getMaNhanVien())
-                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại"));
+                .orElseThrow(() -> new CustomException(Error.NHANVIEN_NOT_FOUND));
         CuaHang cuaHang = cuaHangRepository.findById(dto.getMaCuaHang())
-                .orElseThrow(() -> new RuntimeException("Cửa hàng không tồn tại"));
+                .orElseThrow(() -> new CustomException(Error.CUAHANG_NOT_FOUND));
 
         DonHang donHang = DonHang.builder()
                 .ma(getGenerationId())
@@ -67,7 +69,7 @@ public class DonHangService {
 
         for (ChiTietDonHangDTO ctDTO : dto.getChiTietDonHang()) {
             SanPham sanPham = sanPhamRepository.findById(ctDTO.getMaSanPham())
-                    .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
+                    .orElseThrow(() -> new CustomException(Error.SANPHAM_NOT_FOUND));
 
             ChiTietDonHang chiTiet = new ChiTietDonHang();
             chiTiet.setMa(getGenerationId());

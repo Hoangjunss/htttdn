@@ -4,6 +4,8 @@ import com.example.demo.dto.*;
 import com.example.demo.entities.Kho;
 import com.example.demo.entities.SanPham;
 import com.example.demo.entities.TonKho;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.Error;
 import com.example.demo.mapper.KhoMapper;
 import com.example.demo.repositories.KhoRepository;
 import com.example.demo.repositories.SanPhamRepository;
@@ -37,17 +39,17 @@ public class KhoService {
 
     private Kho getKhoById(Integer maKho){
         return khoRepository.findById(maKho)
-                .orElseThrow(()-> new RuntimeException("kho not found"));
+                .orElseThrow(()-> new CustomException(Error.KHO_NOT_FOUND));
     }
 
     private SanPham getSanPhamById(Integer maSanPham){
         return sanPhamRepository.findById(maSanPham)
-                .orElseThrow(()-> new RuntimeException("san pham not found"));
+                .orElseThrow(()-> new CustomException(Error.SANPHAM_NOT_FOUND));
     }
 
     private TonKho getTonKhoById(Integer maTonKho){
         return tonKhoRepository.findById(maTonKho)
-                .orElseThrow(()-> new RuntimeException("ton kho not found"));
+                .orElseThrow(()-> new CustomException(Error.TONKHO_NOT_FOUND));
     }
 
     private TonKho getTonKhoByKhoAndSP(Kho kho, SanPham sanPham){
@@ -56,6 +58,7 @@ public class KhoService {
 
     public KhoDTO capNhatTonKhoTuPhieuNhap(PhieuNhapDTO phieuNhapDTO){
         Integer maCuaHang = khoRepository.findCuaHangByPhieuNhap(phieuNhapDTO.getMa());
+
 
         Kho kho = khoRepository.findKhoByMaCuaHang(maCuaHang);
 
