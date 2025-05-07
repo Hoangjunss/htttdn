@@ -42,7 +42,7 @@ public enum Error {
     NHANVIEN_INVALID_EMAIL(2102, "Email không hợp lệ", HttpStatus.BAD_REQUEST),
     NHANVIEN_INVALID_PHONE(2103, "Số điện thoại không hợp lệ", HttpStatus.BAD_REQUEST),
     NHANVIEN_INVALID_ADDRESS(2104, "Địa chỉ không hợp lệ", HttpStatus.BAD_REQUEST),
-    NHANVIEN_INVALID_BIRTH_DATE(2105, "Ngày sinh không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_BIRTH_DATE(2105, "Ngày sinh không hợp lệ định dạng YYYY-MM-DD", HttpStatus.BAD_REQUEST),
     NHANVIEN_INVALID_GENDER(2106, "Giới tính không hợp lệ", HttpStatus.BAD_REQUEST),
     NHANVIEN_INVALID_COMMISSION(2107, "Tỉ lệ hoa hồng không hợp lệ", HttpStatus.BAD_REQUEST),
     NHANVIEN_INVALID_HOURLY_WAGE(2108, "Lương theo giờ không hợp lệ", HttpStatus.BAD_REQUEST),

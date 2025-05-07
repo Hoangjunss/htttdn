@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import com.example.demo.dto.SanPhamDTO;
 import com.example.demo.entities.SanPham;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.Error;
 import com.example.demo.repositories.LoaiSanPhamRepository;
 import com.example.demo.repositories.SanPhamRepository;
 import com.example.demo.repositories.SizeRepository;
@@ -36,32 +38,52 @@ public class SanPhamService {
     }
 
     public Page<SanPham> timSanPham(Integer tonKhoId, Integer cuaHangId, Integer loaiSanPhamId, Integer sizeId, int page, int size) {
-        Specification<SanPham> spec = SanPhamSpecification.filterSanPham(tonKhoId, cuaHangId, loaiSanPhamId, sizeId);
-        Pageable pageable = PageRequest.of(page, size);
-        return sanPhamRepository.findAll(spec, pageable);
+        try {
+            Specification<SanPham> spec = SanPhamSpecification.filterSanPham(tonKhoId, cuaHangId, loaiSanPhamId, sizeId);
+            Pageable pageable = PageRequest.of(page, size);
+            return sanPhamRepository.findAll(spec, pageable);
+        } catch (Exception e) {
+            throw new CustomException(Error.SANPHAM_NOT_FOUND);
+        }
     }
 
     @Transactional
     public SanPham taoSanPham(SanPhamDTO dto) {
-        SanPham sanPham = new SanPham();
-        sanPham.setMa(getGenerationId());
-        sanPham.setTenSanPham(dto.getTenSanPham());
+        try {
+            // Validate DTO fields
+            validateSanPhamFields(dto);
 
-        sanPham.setHinhSanPham(imageService.saveImage(dto.getHinhSanPham()));
-        sanPham.setGioiTinh(dto.getGioiTinh());
-        sanPham.setMoTa(dto.getMoTa());
-        sanPham.setTrangThai(dto.getTrangThai());
-        sanPham.setNgayTao(LocalDateTime.now());
+            SanPham sanPham = new SanPham();
+            sanPham.setMa(getGenerationId());
+            sanPham.setTenSanPham(dto.getTenSanPham());
 
-        sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(dto.getLoaiSanPhamId())
-                .orElseThrow(() -> new RuntimeException("Loại sản phẩm không tồn tại")));
-        sanPham.setSize(sizeRepository.findById(dto.getSizeId())
-                .orElseThrow(() -> new RuntimeException("Size không tồn tại")));
-        //sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
-                //.orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
-        System.out.print(sanPham);
+            try {
+                sanPham.setHinhSanPham(imageService.saveImage(dto.getHinhSanPham()));
+            } catch (Exception e) {
+                throw new CustomException(Error.SANPHAM_INVALID_IMAGE);
+            }
 
-        return sanPhamRepository.save(sanPham);
+            sanPham.setGioiTinh(dto.getGioiTinh());
+            sanPham.setMoTa(dto.getMoTa());
+            sanPham.setTrangThai(dto.getTrangThai());
+            sanPham.setNgayTao(LocalDateTime.now());
+
+            sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(dto.getLoaiSanPhamId())
+                    .orElseThrow(() -> new CustomException(Error.LOAISANPHAM_NOT_FOUND)));
+
+            sanPham.setSize(sizeRepository.findById(dto.getSizeId())
+                    .orElseThrow(() -> new CustomException(Error.SIZE_NOT_FOUND)));
+
+            // Uncomment if needed
+            // sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
+            //         .orElseThrow(() -> new CustomException(Error.TONKHO_NOT_FOUND)));
+
+            return sanPhamRepository.save(sanPham);
+        } catch (CustomException ce) {
+            throw ce; // Re-throw if it's already our custom exception
+        } catch (Exception e) {
+            throw new CustomException(Error.SANPHAM_UNABLE_TO_SAVE);
+        }
     }
 
     private Integer getGenerationId() {
@@ -71,31 +93,89 @@ public class SanPhamService {
 
     @Transactional
     public SanPham capNhatSanPham(Integer ma, SanPhamDTO dto) {
-        SanPham sanPham = sanPhamRepository.findById(ma)
-                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
+        try {
+            // Validate fields
+            validateSanPhamFields(dto);
 
-        sanPham.setTenSanPham(dto.getTenSanPham());
+            SanPham sanPham = sanPhamRepository.findById(ma)
+                    .orElseThrow(() -> new CustomException(Error.SANPHAM_NOT_FOUND));
 
-        sanPham.setGioiTinh(dto.getGioiTinh());
-        sanPham.setMoTa(dto.getMoTa());
-        sanPham.setTrangThai(dto.getTrangThai());
+            sanPham.setTenSanPham(dto.getTenSanPham());
 
-        sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(dto.getLoaiSanPhamId())
-                .orElseThrow(() -> new RuntimeException("Loại sản phẩm không tồn tại")));
-        sanPham.setSize(sizeRepository.findById(dto.getSizeId())
-                .orElseThrow(() -> new RuntimeException("Size không tồn tại")));
-        //sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
-                //.orElseThrow(() -> new RuntimeException("Tồn kho không tồn tại")));
+            // Update image if provided
+            if (dto.getHinhSanPham() != null && !dto.getHinhSanPham().isEmpty()) {
+                try {
+                    sanPham.setHinhSanPham(imageService.saveImage(dto.getHinhSanPham()));
+                } catch (Exception e) {
+                    throw new CustomException(Error.SANPHAM_INVALID_IMAGE);
+                }
+            }
 
-        return sanPhamRepository.save(sanPham);
+            sanPham.setGioiTinh(dto.getGioiTinh());
+            sanPham.setMoTa(dto.getMoTa());
+            sanPham.setTrangThai(dto.getTrangThai());
+
+            sanPham.setLoaiSanPham(loaiSanPhamRepository.findById(dto.getLoaiSanPhamId())
+                    .orElseThrow(() -> new CustomException(Error.LOAISANPHAM_NOT_FOUND)));
+
+            sanPham.setSize(sizeRepository.findById(dto.getSizeId())
+                    .orElseThrow(() -> new CustomException(Error.SIZE_NOT_FOUND)));
+
+            // Uncomment if needed
+            // sanPham.setTonKho(tonKhoRepository.findById(dto.getTonKhoId())
+            //        .orElseThrow(() -> new CustomException(Error.TONKHO_NOT_FOUND)));
+
+            return sanPhamRepository.save(sanPham);
+        } catch (CustomException ce) {
+            throw ce; // Re-throw if it's already our custom exception
+        } catch (Exception e) {
+            throw new CustomException(Error.SANPHAM_UNABLE_TO_UPDATE);
+        }
     }
 
     @Transactional
     public void xoaSanPham(Integer ma) {
-        if (!sanPhamRepository.existsById(ma)) {
-            throw new RuntimeException("Sản phẩm không tồn tại");
+        try {
+            if (!sanPhamRepository.existsById(ma)) {
+                throw new CustomException(Error.SANPHAM_NOT_FOUND);
+            }
+            sanPhamRepository.deleteById(ma);
+        } catch (CustomException ce) {
+            throw ce; // Re-throw if it's already our custom exception
+        } catch (Exception e) {
+            throw new CustomException(Error.SANPHAM_UNABLE_TO_DELETE);
         }
-        sanPhamRepository.deleteById(ma);
     }
 
+    // Validation methods
+    private void validateSanPhamFields(SanPhamDTO dto) {
+        if (dto.getTenSanPham() == null || dto.getTenSanPham().trim().isEmpty()) {
+            throw new CustomException(Error.SANPHAM_INVALID_NAME);
+        }
+
+        if (dto.getMoTa() == null || dto.getMoTa().trim().isEmpty()) {
+            throw new CustomException(Error.SANPHAM_INVALID_DESCRIPTION);
+        }
+
+        if (dto.getTrangThai() == null) {
+            throw new CustomException(Error.SANPHAM_INVALID_STATUS);
+        }
+
+        // Validate gender if needed
+        if (dto.getGioiTinh() == null || !(dto.getGioiTinh().equalsIgnoreCase("Nam") ||
+                dto.getGioiTinh().equalsIgnoreCase("Nữ") ||
+                dto.getGioiTinh().equalsIgnoreCase("Unisex"))) {
+            throw new CustomException(Error.SANPHAM_INVALID_GENDER);
+        }
+
+        // LoaiSanPham validation
+        if (dto.getLoaiSanPhamId() == null) {
+            throw new CustomException(Error.LOAISANPHAM_NOT_FOUND);
+        }
+
+        // Size validation
+        if (dto.getSizeId() == null) {
+            throw new CustomException(Error.SIZE_NOT_FOUND);
+        }
+    }
 }
