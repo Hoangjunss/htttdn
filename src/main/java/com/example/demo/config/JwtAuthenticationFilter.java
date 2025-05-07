@@ -1,7 +1,11 @@
 package com.example.demo.config;
 
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.Error;
 import com.example.demo.services.OurUserDetailsService;
 import com.example.demo.util.JwtTokenUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -33,19 +38,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        final  String jwtToken;
+        final String jwtToken;
         final String userEmail;
-        if (authHeader == null || authHeader.isBlank()) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        jwtToken = authHeader.substring(7);
 
-        userEmail = jwtTokenUtil.extractTokenGetUsername(jwtToken);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = ourUserDetailsService.loadUserByUsername(userEmail);
+        try {
+            if (authHeader == null || authHeader.isBlank() || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-            if (jwtTokenUtil.isTokenValid(jwtToken, userDetails)) {
+            jwtToken = authHeader.substring(7); // cắt "Bearer "
+
+            // ✅ Có thể ném ra ExpiredJwtException, MalformedJwtException,...
+            userEmail = jwtTokenUtil.extractTokenGetUsername(jwtToken);
+
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = ourUserDetailsService.loadUserByUsername(userEmail);
+
+                if (!jwtTokenUtil.isTokenValid(jwtToken, userDetails)) {
+                    throw new CustomException(Error.JWT_INVALID);
+                }
+
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
@@ -55,7 +68,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 securityContext.setAuthentication(token);
                 SecurityContextHolder.setContext(securityContext);
             }
+
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            throw new CustomException(Error.JWT_EXPIRED);
+        } catch (MalformedJwtException | IllegalArgumentException e) {
+            throw new CustomException(Error.JWT_MALFORMED);
         }
-        filterChain.doFilter(request, response);
     }
+
 }
