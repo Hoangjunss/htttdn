@@ -23,6 +23,7 @@ public class SanPham {
     private String moTa;
     private String trangThai;
     private LocalDateTime ngayTao;
+    private Double gia;
 
     @ManyToOne
     @JoinColumn

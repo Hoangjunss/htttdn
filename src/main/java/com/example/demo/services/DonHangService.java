@@ -1,22 +1,22 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.ChiTietDonHangDTO;
 import com.example.demo.dto.DonHangCreateDTO;
-import com.example.demo.entities.CuaHang;
-import com.example.demo.entities.DonHang;
-import com.example.demo.entities.NhanVien;
-import com.example.demo.entities.SanPham;
-import com.example.demo.repositories.CuaHangRepository;
-import com.example.demo.repositories.DonHangRepository;
-import com.example.demo.repositories.NhanVienRepository;
-import com.example.demo.repositories.SanPhamRepository;
+import com.example.demo.dto.DonHangDTO;
+import com.example.demo.entities.*;
+import com.example.demo.repositories.*;
 import com.example.demo.specification.DonHangSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,40 +26,82 @@ public class DonHangService {
     private final NhanVienRepository nhanVienRepository;
     private final SanPhamRepository sanPhamRepository;
     private final CuaHangRepository cuaHangRepository;
+    private final ChiTietDonHangRepository chiTietDonHangRepository;
 
     @Autowired
     public DonHangService(DonHangRepository repository,
                           NhanVienRepository nhanVienRepository,
                           SanPhamRepository sanPhamRepository,
-                          CuaHangRepository cuaHangRepository) {
+                          CuaHangRepository cuaHangRepository, ChiTietDonHangRepository chiTietDonHangRepository) {
         this.repository = repository;
         this.nhanVienRepository = nhanVienRepository;
         this.sanPhamRepository = sanPhamRepository;
         this.cuaHangRepository = cuaHangRepository;
+        this.chiTietDonHangRepository = chiTietDonHangRepository;
     }
 
-    public DonHang save(DonHangCreateDTO donHangCreateDTO){
-        NhanVien nhanVien = nhanVienRepository.findById(donHangCreateDTO.getMaNhanVien())
-                .orElseThrow(()-> new RuntimeException("Nhan vien not found"));
+    @Transactional
+    public DonHangDTO save(DonHangCreateDTO dto) {
+        NhanVien nhanVien = nhanVienRepository.findById(dto.getMaNhanVien())
+                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại"));
+        CuaHang cuaHang = cuaHangRepository.findById(dto.getMaCuaHang())
+                .orElseThrow(() -> new RuntimeException("Cửa hàng không tồn tại"));
 
-        CuaHang cuaHang = cuaHangRepository.findById(donHangCreateDTO.getMaCuaHang())
-                .orElseThrow(()-> new RuntimeException("Cua hang not found"));
+        DonHang donHang = DonHang.builder()
+                .ma(getGenerationId())
+                .thoiGianBan(LocalDateTime.now())
+                .giaGiam(dto.getGiaGiam())
+                .trangThai(dto.getTrangThai())
+                .phuongThuc(dto.getPhuongThuc())
+                .cuaHang(cuaHang)
+                .nhanVien(nhanVien)
+                .build();
 
-        SanPham sanPham = sanPhamRepository.findById(donHangCreateDTO.getMaSanPham())
-                .orElseThrow(()-> new RuntimeException("San pham not found"));
+        double tongGiaTri = 0.0;
 
-        DonHang donHang = new DonHang();
-        donHang.setMa(getGenerationId());
-        donHang.setThoiGianBan(LocalDateTime.now());
-        donHang.setTongGiaTri(donHangCreateDTO.getTongGiaTri());
-        donHang.setGiaGiam(donHangCreateDTO.getGiaGiam());
-        donHang.setTrangThai(donHangCreateDTO.getTrangThai());
-        donHang.setPhuongThuc(donHangCreateDTO.getPhuongThuc());
-        donHang.setCuaHang(cuaHang);
-        donHang.setNhanVien(nhanVien);
-        donHang.setSanPham(sanPham);
-        return repository.save(donHang);
+        DonHang savedDonHang = repository.save(donHang);
+
+        List<ChiTietDonHangDTO> chiTietDonHangDTOList = new ArrayList<>();
+
+        for (ChiTietDonHangDTO ctDTO : dto.getChiTietDonHang()) {
+            SanPham sanPham = sanPhamRepository.findById(ctDTO.getMaSanPham())
+                    .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
+
+            ChiTietDonHang chiTiet = new ChiTietDonHang();
+            chiTiet.setMa(getGenerationId());
+            chiTiet.setDonGia(sanPham.getGia());
+            chiTiet.setSoLuong(ctDTO.getSoluong());
+            chiTiet.setSanPham(sanPham);
+            chiTiet.setDonHang(savedDonHang);
+
+            tongGiaTri += chiTiet.getDonGia() * chiTiet.getSoLuong();  // Cập nhật tổng giá trị
+
+            chiTietDonHangRepository.save(chiTiet);
+
+            // Chuyển đổi chi tiết đơn hàng thành ChiTietDonHangDTO và thêm vào danh sách
+            ChiTietDonHangDTO chiTietDonHangDTO = new ChiTietDonHangDTO();
+            chiTietDonHangDTO.setMaSanPham(sanPham.getMa());
+            chiTietDonHangDTO.setSoluong(ctDTO.getSoluong());
+            chiTietDonHangDTO.setTongTien(chiTiet.getDonGia() * chiTiet.getSoLuong());
+
+            chiTietDonHangDTOList.add(chiTietDonHangDTO);
+        }
+
+
+        savedDonHang.setTongGiaTri(tongGiaTri);
+        DonHang donHang1= repository.save(savedDonHang); // cập nhật lại tổng giá trị
+        DonHangDTO donHangDTO=new DonHangDTO();
+        donHangDTO.setMaDonHang(donHang1.getMa());
+        donHangDTO.setTenCuaHang(donHang1.getCuaHang().getTenCuaHang());
+        donHangDTO.setChiTietDonHang(chiTietDonHangDTOList);
+        donHangDTO.setTongGiaTri(donHang1.getTongGiaTri());
+        donHangDTO.setTenNhanVIen(donHang1.getNhanVien().getHoTen());
+        donHangDTO.setThoiGianBan(donHang1.getThoiGianBan());
+        donHangDTO.setPhuongThuc(donHang1.getPhuongThuc());
+        donHangDTO.setGiaGiam(donHang1.getGiaGiam());
+        return donHangDTO;
     }
+
 
     // Cập nhật đơn hàng
     public DonHang updateDonHang(Integer ma, DonHang newDonHang) {

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class DonHangCreateDTO {
     private Double giaGiam;
     private String trangThai;
     private String phuongThuc;
-    private Integer maSanPham;
+    private List<ChiTietDonHangDTO> chiTietDonHang;
     private Integer maNhanVien;
     private Integer maCuaHang;
 }

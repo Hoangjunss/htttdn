@@ -25,9 +25,6 @@ public class DonHang {
     private String trangThai;
     private String phuongThuc;
 
-    @ManyToOne
-    @JoinColumn
-    private SanPham sanPham;
 
     @ManyToOne
     @JoinColumn

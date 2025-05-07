@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.ApiResponses;
 import com.example.demo.dto.DonHangCreateDTO;
+import com.example.demo.dto.DonHangDTO;
 import com.example.demo.entities.DonHang;
 import com.example.demo.services.DonHangService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,8 +31,8 @@ public class DonHangController {
 
     @Operation(summary = "Tạo đơn hàng", description = "Tạo mới một đơn hàng trong hệ thống.")
     @PostMapping
-    public ResponseEntity<ApiResponses<DonHang>> createDonHang(@RequestBody DonHangCreateDTO dto) {
-        DonHang donHang = donHangService.save(dto);
+    public ResponseEntity<ApiResponses<DonHangDTO>> createDonHang(@RequestBody DonHangCreateDTO dto) {
+        DonHangDTO donHang = donHangService.save(dto);
         return ResponseEntity.ok(new ApiResponses<>(true, "Tạo đơn hàng thành công!", donHang));
     }
 
