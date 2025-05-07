@@ -44,7 +44,7 @@ public class WebSecurityConfiguration {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .authorizeHttpRequests((auth) -> auth    .requestMatchers("/**",  "/swagger-ui/**",
-                                "/v3/api-docs/**",
+                                "/v3/api-docs/**","/accounts/signup","/accounts/signin",
                                 "/swagger-ui.html").permitAll()
                         .anyRequest()
                         .authenticated()

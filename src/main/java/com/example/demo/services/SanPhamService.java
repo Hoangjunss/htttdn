@@ -24,13 +24,15 @@ public class SanPhamService {
     private final LoaiSanPhamRepository loaiSanPhamRepository;
     private final SizeRepository sizeRepository;
     private final TonKhoRepository tonKhoRepository;
+    private final ImageService imageService;
 
     public SanPhamService(SanPhamRepository sanPhamRepository, LoaiSanPhamRepository loaiSanPhamRepository,
-                          SizeRepository sizeRepository, TonKhoRepository tonKhoRepository) {
+                          SizeRepository sizeRepository, TonKhoRepository tonKhoRepository, ImageService imageService) {
         this.sanPhamRepository = sanPhamRepository;
         this.loaiSanPhamRepository = loaiSanPhamRepository;
         this.sizeRepository = sizeRepository;
         this.tonKhoRepository = tonKhoRepository;
+        this.imageService = imageService;
     }
 
     public Page<SanPham> timSanPham(Integer tonKhoId, Integer cuaHangId, Integer loaiSanPhamId, Integer sizeId, int page, int size) {
@@ -44,7 +46,8 @@ public class SanPhamService {
         SanPham sanPham = new SanPham();
         sanPham.setMa(getGenerationId());
         sanPham.setTenSanPham(dto.getTenSanPham());
-        sanPham.setHinhSanPham(dto.getHinhSanPham());
+
+        sanPham.setHinhSanPham(imageService.saveImage(dto.getHinhSanPham()));
         sanPham.setGioiTinh(dto.getGioiTinh());
         sanPham.setMoTa(dto.getMoTa());
         sanPham.setTrangThai(dto.getTrangThai());
@@ -72,7 +75,7 @@ public class SanPhamService {
                 .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
 
         sanPham.setTenSanPham(dto.getTenSanPham());
-        sanPham.setHinhSanPham(dto.getHinhSanPham());
+
         sanPham.setGioiTinh(dto.getGioiTinh());
         sanPham.setMoTa(dto.getMoTa());
         sanPham.setTrangThai(dto.getTrangThai());

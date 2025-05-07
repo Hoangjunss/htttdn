@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PhieuNhapKho {
+public class    PhieuNhapKho {
     @Id
     private Integer ma;
     private LocalDateTime thoiGianNhap;

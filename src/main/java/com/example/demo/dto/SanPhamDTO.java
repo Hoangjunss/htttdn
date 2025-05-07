@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class SanPhamDTO {
     private Integer ma;
     private String tenSanPham;
-    private String hinhSanPham;
+    private MultipartFile hinhSanPham;
     private String gioiTinh;
     private String moTa;
     private String trangThai;
@@ -23,17 +23,18 @@ public class SanPhamDTO {
     private Integer loaiSanPhamId;
     private Integer sizeId;
     private Integer tonKhoId;
+    private String urlHinhSanPham;
 
     public SanPhamDTO(SanPham sanPham) {
         this.ma = sanPham.getMa();
         this.tenSanPham = sanPham.getTenSanPham();
-        this.hinhSanPham = sanPham.getHinhSanPham();
         this.gioiTinh = sanPham.getGioiTinh();
         this.moTa = sanPham.getMoTa();
         this.trangThai = sanPham.getTrangThai();
         this.ngayTao = sanPham.getNgayTao();
         this.loaiSanPhamId = sanPham.getLoaiSanPham().getMa();
         this.sizeId = sanPham.getSize().getMa();
+        this.urlHinhSanPham=sanPham.getHinhSanPham();
         //this.tonKhoId = sanPham.getTonKho().getMa();
     }
 }
