@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 
@@ -41,7 +42,7 @@ public class NhanVienService {
 
     public NhanVienDTO createNhanVien(NhanVienCreateDTO dto) {
         NhanVien nhanVien = new NhanVien();
-
+        nhanVien.setMa(getGenerationId());
         mapFromCreateDTO(nhanVien, dto);
 
         nhanVienRepository.save(nhanVien);
@@ -76,18 +77,50 @@ public class NhanVienService {
     }
 
     private void mapFromUpdateDTO(NhanVien nv, NhanVienUpdateDTO dto) {
-        nv.setHoTen(dto.getHoTen());
-        nv.setNgaySinh(String.valueOf(LocalDate.parse(dto.getNgaySinh())));
-        nv.setGioiTinh(dto.getGioiTinh());
-        nv.setDiaChi(dto.getDiaChi());
-        nv.setEmail(dto.getEmail());
-        nv.setSoDienThoai(dto.getSoDienThoai());
-        nv.setTiLeHoaHong(dto.getTiLeHoaHong());
-        nv.setLuongTheoGio(dto.getLuongTheoGio());
-        nv.setChucVu(dto.getChucVu());
-        nv.setCuaHang(cuaHangRepository.findById(dto.getMaCuaHang())
-                .orElseThrow(() -> new RuntimeException("Cửa hàng không tồn tại")));
+        if (dto.getHoTen() != null && !dto.getHoTen().isEmpty()) {
+            nv.setHoTen(dto.getHoTen());
+        }
+
+        if (dto.getNgaySinh() != null && !dto.getNgaySinh().isEmpty()) {
+            nv.setNgaySinh(String.valueOf(LocalDate.parse(dto.getNgaySinh())));
+        }
+
+        if (dto.getGioiTinh() != null && !dto.getGioiTinh().isEmpty()) {
+            nv.setGioiTinh(dto.getGioiTinh());
+        }
+
+        if (dto.getDiaChi() != null && !dto.getDiaChi().isEmpty()) {
+            nv.setDiaChi(dto.getDiaChi());
+        }
+
+        if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+            nv.setEmail(dto.getEmail());
+        }
+
+        if (dto.getSoDienThoai() != null && !dto.getSoDienThoai().isEmpty()) {
+            nv.setSoDienThoai(dto.getSoDienThoai());
+        }
+
+        if (dto.getTiLeHoaHong() != null) {
+            nv.setTiLeHoaHong(dto.getTiLeHoaHong());
+        }
+
+        if (dto.getLuongTheoGio() != null) {
+            nv.setLuongTheoGio(dto.getLuongTheoGio());
+        }
+
+        if (dto.getChucVu() != null && !dto.getChucVu().isEmpty()) {
+            nv.setChucVu(dto.getChucVu());
+        }
+
+        if (dto.getMaCuaHang() != null) {
+            nv.setCuaHang(
+                    cuaHangRepository.findById(dto.getMaCuaHang())
+                            .orElseThrow(() -> new RuntimeException("Cửa hàng không tồn tại"))
+            );
+        }
     }
+
 
     private NhanVienDTO mapToDTO(NhanVien nv) {
         NhanVienDTO dto = new NhanVienDTO();
@@ -109,5 +142,10 @@ public class NhanVienService {
 
         dto.setCuaHangDTO(chDTO);
         return dto;
+    }
+
+    private Integer getGenerationId() {
+        UUID uuid = UUID.randomUUID();
+        return (int) (uuid.getMostSignificantBits() & 0xFFFFFFFFL);
     }
 }
