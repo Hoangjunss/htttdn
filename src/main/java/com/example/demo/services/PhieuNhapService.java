@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import com.example.demo.dto.*;
 import com.example.demo.entities.*;
+import com.example.demo.exception.CustomException;
+import com.example.demo.exception.Error;
 import com.example.demo.mapper.PhieuNhapKhoMapper;
 import com.example.demo.repositories.*;
 import com.example.demo.specification.PhieuNhapSpecification;
@@ -46,9 +48,9 @@ public class PhieuNhapService {
 
     public PhieuNhapDTO taoPhieuNhap(PhieuNhapCreateDTO phieuNhapCreateDTO){
         NhaCungCap nhaCungCap = nhaCungCapRepository.findById(phieuNhapCreateDTO.getMaNhaCungCap())
-                .orElseThrow(() -> new RuntimeException("NhaCungCap not found"));
+                .orElseThrow(() -> new CustomException(Error.NHACUNGCAP_NOT_FOUND));
         NhanVien nhanVien = nhanVienRepository.findById(phieuNhapCreateDTO.getMaNhanVien())
-                .orElseThrow(() -> new RuntimeException("NhanVien not found"));
+                .orElseThrow(() -> new CustomException(Error.NHANVIEN_NOT_FOUND));
 
         PhieuNhapKho phieuNhapKho = new PhieuNhapKho();
         phieuNhapKho.setMa(getGenerationId());
@@ -63,7 +65,7 @@ public class PhieuNhapService {
                 .map(chiTietPhieuNhapCreateDTO -> {
                     ChiTietPhieuNhap chiTietPhieuNhap = new ChiTietPhieuNhap();
                     SanPham sanPham = sanPhamRepository.findById(chiTietPhieuNhapCreateDTO.getMaSanPham())
-                            .orElseThrow(() -> new RuntimeException("San pham not found"));
+                            .orElseThrow(() -> new CustomException(Error.SANPHAM_NOT_FOUND));
 
                     chiTietPhieuNhap.setMa(getGenerationId());
                     chiTietPhieuNhap.setPhieuNhapKho(phieuNhapKho1);
@@ -88,13 +90,13 @@ public class PhieuNhapService {
     public PhieuNhapDTO updatePhieuNhap(PhieuNhapUpdateDTO phieuNhapUpdateDTO){
 
         PhieuNhapKho phieuNhapKho = phieuNhapKhoRepository.findById(phieuNhapUpdateDTO.getMa())
-                .orElseThrow(() -> new RuntimeException("PhieuNhap not found"));
+                .orElseThrow(() -> new CustomException(Error.PHIEUNHAPKHO_NOT_FOUND));
 
         NhanVien nhanVien = nhanVienRepository.findById(phieuNhapUpdateDTO.getMaNhanVien())
-                .orElseThrow(() -> new RuntimeException("NhanVien not found"));
+                .orElseThrow(() -> new CustomException(Error.NHANVIEN_NOT_FOUND));
 
         phieuNhapKho.setNhaCungCap(nhaCungCapRepository.findById(phieuNhapUpdateDTO.getMaNhaCungCap())
-                .orElseThrow(() -> new RuntimeException("NhaCungCap not found")));
+                .orElseThrow(() -> new CustomException(Error.NHACUNGCAP_NOT_FOUND)));
 
         phieuNhapKho.setTongGiaNhap(phieuNhapUpdateDTO.getTongGiaNhap());
         phieuNhapKho.setNhanVien(nhanVien);
@@ -117,13 +119,13 @@ public class PhieuNhapService {
                 .stream()
                 .map(chiTietPhieuNhapUpdateDTO -> {
                     ChiTietPhieuNhap chiTietPhieuNhap = chiTietPhieuNhapRepository.findById(chiTietPhieuNhapUpdateDTO.getMa())
-                            .orElseThrow(() -> new RuntimeException("ChiTietPhieuNhap not found"));
+                            .orElseThrow(() -> new CustomException(Error.CHITIETPHIEUNHAP_NOT_FOUND));
 
                      SanPham sanPham = sanPhamRepository.findById(chiTietPhieuNhapUpdateDTO.getMaSanPham())
-                            .orElseThrow(() -> new RuntimeException("San pham not found"));
+                            .orElseThrow(() -> new CustomException(Error.SANPHAM_NOT_FOUND));
 
                      PhieuNhapKho phieuNhapKho = phieuNhapKhoRepository.findById(chiTietPhieuNhapUpdateDTO.getMaPhieuNhap())
-                                     .orElseThrow(()-> new RuntimeException("PhieuNhapKho not found"));
+                                     .orElseThrow(()-> new CustomException(Error.PHIEUNHAPKHO_NOT_FOUND));
 
                      chiTietPhieuNhap.setSanPham(sanPham);
                      chiTietPhieuNhap.setGiaNhap(chiTietPhieuNhapUpdateDTO.getGiaNhap());
@@ -140,7 +142,7 @@ public class PhieuNhapService {
         }
 
         PhieuNhapKho phieuNhapKho = phieuNhapKhoRepository.findById(chiTietPhieuNhapUpdateDTOS.getFirst().getMaPhieuNhap())
-                .orElseThrow(()-> new RuntimeException("PhieuNhapKho not found"));
+                .orElseThrow(()-> new CustomException(Error.PHIEUNHAPKHO_NOT_FOUND));
         phieuNhapKho.setTongGiaNhap(tongTien);
         phieuNhapKhoRepository.save(phieuNhapKho);
 
@@ -175,7 +177,7 @@ public class PhieuNhapService {
 
     public PhieuNhapDTO getById(Integer maPhieuNhap){
         PhieuNhapKho phieuNhapKho = phieuNhapKhoRepository.findById(maPhieuNhap)
-               .orElseThrow(() -> new RuntimeException("PhieuNhap not found"));
+               .orElseThrow(() -> new CustomException(Error.PHIEUNHAPKHO_NOT_FOUND));
 
         List<ChiTietPhieuNhap> chiTietPhieuNhaps = chiTietPhieuNhapRepository.findAllByPhieuNhapKho(phieuNhapKho);
 
@@ -187,13 +189,13 @@ public class PhieuNhapService {
             chiTietPhieuNhapRepository.deleteAllByPhieuNhapKho(phieuNhapKhoRepository.findById(maPhieuNhapkho).get());
             phieuNhapKhoRepository.deleteById(maPhieuNhapkho);
         }
-        else throw new RuntimeException("PhieuNhap not found");
+        else throw new CustomException(Error.PHIEUNHAPKHO_NOT_FOUND);
     }
 
     public void deleteChiTietPhieuNhapKho(Integer maChiTietPhieuNhapKho){
         if(chiTietPhieuNhapRepository.findById(maChiTietPhieuNhapKho).isPresent())
             chiTietPhieuNhapRepository.deleteById(maChiTietPhieuNhapKho);
-        else throw new RuntimeException("ChiTietPhieuNhap not found");
+        else throw new CustomException(Error.CHITIETPHIEUNHAP_NOT_FOUND);
     }
 
 
