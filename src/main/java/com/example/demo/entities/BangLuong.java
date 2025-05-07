@@ -21,7 +21,7 @@ public class BangLuong {
     private Integer namTinhluong;
     private Double luongCoBan;
     private Double thucNhan;
-    private Integer tongHoaHong;
+    private Double tongHoaHong;
     private Integer tongGioLam;
     private Integer quyTinhLuong;
     private Double khauTru;

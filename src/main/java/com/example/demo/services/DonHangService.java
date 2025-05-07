@@ -27,17 +27,19 @@ public class DonHangService {
     private final SanPhamRepository sanPhamRepository;
     private final CuaHangRepository cuaHangRepository;
     private final ChiTietDonHangRepository chiTietDonHangRepository;
+    private final BangLuongRepository bangLuongRepository;
 
     @Autowired
     public DonHangService(DonHangRepository repository,
                           NhanVienRepository nhanVienRepository,
                           SanPhamRepository sanPhamRepository,
-                          CuaHangRepository cuaHangRepository, ChiTietDonHangRepository chiTietDonHangRepository) {
+                          CuaHangRepository cuaHangRepository, ChiTietDonHangRepository chiTietDonHangRepository, BangLuongRepository bangLuongRepository) {
         this.repository = repository;
         this.nhanVienRepository = nhanVienRepository;
         this.sanPhamRepository = sanPhamRepository;
         this.cuaHangRepository = cuaHangRepository;
         this.chiTietDonHangRepository = chiTietDonHangRepository;
+        this.bangLuongRepository = bangLuongRepository;
     }
 
     @Transactional
@@ -90,6 +92,30 @@ public class DonHangService {
 
         savedDonHang.setTongGiaTri(tongGiaTri);
         DonHang donHang1= repository.save(savedDonHang); // cập nhật lại tổng giá trị
+        BangLuong bangLuong = bangLuongRepository.findByNhanVienAndNamTinhluongAndThangTinhLuong(
+                nhanVien, LocalDate.now().getYear(), LocalDate.now().getMonthValue());
+        double hoaHong = 0.0;
+        if (bangLuong != null) {
+            hoaHong += donHang1.getTongGiaTri() * (nhanVien.getTiLeHoaHong() / 100.0);
+          bangLuong.setTongHoaHong(bangLuong.getTongHoaHong()+hoaHong);
+          bangLuong.setThucNhan(bangLuong.getThucNhan() + hoaHong);
+            bangLuongRepository.save(bangLuong);
+        } else {
+            BangLuong bangLuongMoi = new BangLuong();
+            bangLuongMoi.setMa(getGenerationId());
+            bangLuongMoi.setNhanVien(nhanVien);
+            bangLuongMoi.setThangTinhLuong(LocalDate.now().getMonthValue());
+            bangLuongMoi.setNamTinhluong(LocalDate.now().getYear());
+            bangLuongMoi.setTongGioLam(0);
+
+            bangLuongMoi.setLuongCoBan(nhanVien.getLuongTheoGio()); // Sẽ được cập nhật sau
+            bangLuongMoi.setThucNhan(hoaHong);
+            bangLuongMoi.setTongHoaHong(hoaHong);
+            bangLuongMoi.setQuyTinhLuong(LocalDate.now().getMonthValue()); // Mặc định là tháng hiện tại
+            bangLuongMoi.setKhauTru(0.0);
+
+            bangLuongRepository.save(bangLuongMoi);
+        }
         DonHangDTO donHangDTO=new DonHangDTO();
         donHangDTO.setMaDonHang(donHang1.getMa());
         donHangDTO.setTenCuaHang(donHang1.getCuaHang().getTenCuaHang());

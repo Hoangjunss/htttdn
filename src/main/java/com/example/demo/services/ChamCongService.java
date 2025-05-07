@@ -78,7 +78,7 @@ public class ChamCongService {
 
             bangLuongMoi.setLuongCoBan(nhanVien.getLuongTheoGio()); // Sẽ được cập nhật sau
             bangLuongMoi.setThucNhan(nhanVien.getLuongTheoGio()*tongGioLam);
-            bangLuongMoi.setTongHoaHong(0);
+            bangLuongMoi.setTongHoaHong(0.0);
             bangLuongMoi.setQuyTinhLuong(thangHienTai); // Mặc định là tháng hiện tại
             bangLuongMoi.setKhauTru(0.0);
 
