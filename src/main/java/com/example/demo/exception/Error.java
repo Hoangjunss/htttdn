@@ -19,195 +19,212 @@ public enum Error {
     DUPLICATE_KEY(9996, "Duplicate key found", HttpStatus.CONFLICT),
     EMPTY_RESULT(9995, "No result found", HttpStatus.NOT_FOUND),
     NON_UNIQUE_RESULT(9994, "Non-unique result found", HttpStatus.CONFLICT),
-    //User-related errors
-    USER_NOT_FOUND(1001, "User not found", HttpStatus.NOT_FOUND),
-    USER_ALREADY_EXISTS(1002, "User already exists", HttpStatus.CONFLICT),
-    USER_UNABLE_TO_SAVE(1003, "Unable to save user", HttpStatus.INTERNAL_SERVER_ERROR),
-    USER_UNABLE_TO_UPDATE(1004, "Unable to update user", HttpStatus.INTERNAL_SERVER_ERROR),
-    USER_UNABLE_TO_DELETE(1005, "Unable to delete user", HttpStatus.INTERNAL_SERVER_ERROR),
-    ACCOUNT_LOCKED(1006,"account locked",HttpStatus.INTERNAL_SERVER_ERROR),
-        //Field User error
-        USER_INVALID_EMAIL(1101, "Invalid email", HttpStatus.BAD_REQUEST),
-        USER_INVALID_PASSWORD(1102, "Invalid password", HttpStatus.BAD_REQUEST),
-        USER_INVALID_NAME(1103, "Invalid first name", HttpStatus.BAD_REQUEST),
-    //Role error
-    ROLE_NOT_FOUND(1201, "Role not found", HttpStatus.NOT_FOUND),
-    ROLE_ALREADY_EXISTS(1202, "Role already exists", HttpStatus.CONFLICT),
-    ROLE_UNABLE_TO_SAVE(1203, "Unable to save role", HttpStatus.INTERNAL_SERVER_ERROR),
-    ROLE_UNABLE_TO_UPDATE(1204, "Unable to update role", HttpStatus.INTERNAL_SERVER_ERROR),
-    ROLE_UNABLE_TO_DELETE(1205, "Unable to delete role", HttpStatus.INTERNAL_SERVER_ERROR),
-        //Field Role error
-        ROLE_INVALID_ROLE(1206, "Invalid name", HttpStatus.BAD_REQUEST),
-    //Supply error codes
-    SUPPLY_NOT_FOUND(1301, "Supply not found", HttpStatus.NOT_FOUND),
-    SUPPLY_ALREADY_EXISTS(1302, "Supply already exists", HttpStatus.CONFLICT),
-    SUPPLY_UNABLE_TO_SAVE(1303, "Unable to save supply", HttpStatus.INTERNAL_SERVER_ERROR),
-    SUPPLY_UNABLE_TO_UPDATE(1304, "Unable to update supply", HttpStatus.INTERNAL_SERVER_ERROR),
-    SUPPLY_UNABLE_TO_DELETE(1305, "Unable to delete supply", HttpStatus.INTERNAL_SERVER_ERROR),
-        //Field Supply error
-        SUPPLY_INVALID_SUPPLY_NAME(1306, "Invalid supply name", HttpStatus.BAD_REQUEST),
-    // ProductSale-related errors
-    PRODUCTSALE_NOT_FOUND(2001, "ProductSale not found", HttpStatus.NOT_FOUND),
-    PRODUCTSALE_ALREADY_EXISTS(2002, "ProductSale already exists", HttpStatus.CONFLICT),
-    PRODUCTSALE_UNABLE_TO_SAVE(2003, "Unable to save ProductSale", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCTSALE_UNABLE_TO_UPDATE(2004, "Unable to update ProductSale", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCTSALE_UNABLE_TO_DELETE(2005, "Unable to delete ProductSale", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field ProductSale errors
-        PRODUCTSALE_INVALID_QUANTITY(2101, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        PRODUCTSALE_INVALID_STATUS(2102, "Invalid status", HttpStatus.BAD_REQUEST),
-    // Product-related errors
-    PRODUCT_NOT_FOUND(3001, "Product not found", HttpStatus.NOT_FOUND),
-    PRODUCT_ALREADY_EXISTS(3002, "Product already exists", HttpStatus.CONFLICT),
-    PRODUCT_UNABLE_TO_SAVE(3003, "Unable to save product", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCT_UNABLE_TO_UPDATE(3004, "Unable to update product", HttpStatus.INTERNAL_SERVER_ERROR),
-    PRODUCT_UNABLE_TO_DELETE(3005, "Unable to delete product", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Product errors
-        PRODUCT_INVALID_NAME(3101, "Invalid product name", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_DESCRIPTION(3102, "Invalid product description", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_AUTHOR(3103, "Invalid product author", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_PAGE(3104, "Invalid number of pages", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_DATE_PUBLIC(3105, "Invalid date", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_STATUS(3106, "Invalid status", HttpStatus.BAD_REQUEST),
-        PRODUCT_INVALID_SIZE(3107, "Invalid size", HttpStatus.BAD_REQUEST),
-    // Image-related errors
-    IMAGE_NOT_FOUND(4001, "Image not found", HttpStatus.NOT_FOUND),
-    IMAGE_ALREADY_EXISTS(4002, "Image already exists", HttpStatus.CONFLICT),
-    IMAGE_UNABLE_TO_SAVE(4003, "Unable to save image", HttpStatus.INTERNAL_SERVER_ERROR),
-    IMAGE_UNABLE_TO_UPDATE(4004, "Unable to update image", HttpStatus.INTERNAL_SERVER_ERROR),
-    IMAGE_UNABLE_TO_DELETE(4005, "Unable to delete image", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Image errors
-        IMAGE_INVALID_URL(4101, "Invalid image URL", HttpStatus.BAD_REQUEST),
-    // Category-related errors
-    CATEGORY_NOT_FOUND(5001, "Category not found", HttpStatus.NOT_FOUND),
-    CATEGORY_ALREADY_EXISTS(5002, "Category already exists", HttpStatus.CONFLICT),
-    CATEGORY_UNABLE_TO_SAVE(5003, "Unable to save category", HttpStatus.INTERNAL_SERVER_ERROR),
-    CATEGORY_UNABLE_TO_UPDATE(5004, "Unable to update category", HttpStatus.INTERNAL_SERVER_ERROR),
-    CATEGORY_UNABLE_TO_DELETE(5005, "Unable to delete category", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Category errors
-        CATEGORY_INVALID_NAME(5101, "Invalid category name", HttpStatus.BAD_REQUEST),
-    // Warehouse-related errors
-    WAREHOUSE_NOT_FOUND(6001, "Warehouse not found", HttpStatus.NOT_FOUND),
-    WAREHOUSE_ALREADY_EXISTS(6002, "Warehouse already exists", HttpStatus.CONFLICT),
-    WAREHOUSE_UNABLE_TO_SAVE(6003, "Unable to save warehouse", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSE_UNABLE_TO_UPDATE(6004, "Unable to update warehouse", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSE_UNABLE_TO_DELETE(6005, "Unable to delete warehouse", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Warehouse errors
-        WAREHOUSE_INVALID_QUANTITY(6101, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        WAREHOUSE_INVALID_PRICE(6102, "Invalid price", HttpStatus.BAD_REQUEST),
-        WAREHOUSE_INVALID_STATUS(6103, "Invalid status", HttpStatus.BAD_REQUEST),
-        WAREHOUSE_INVALID_DATE(6104, "Invalid date", HttpStatus.BAD_REQUEST),
-    // WarehouseReceipt-related errors
-    WAREHOUSERECEIPT_NOT_FOUND(7001, "WarehouseReceipt not found", HttpStatus.NOT_FOUND),
-    WAREHOUSERECEIPT_ALREADY_EXISTS(7002, "WarehouseReceipt already exists", HttpStatus.CONFLICT),
-    WAREHOUSERECEIPT_UNABLE_TO_SAVE(7003, "Unable to save WarehouseReceipt", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSERECEIPT_UNABLE_TO_UPDATE(7004, "Unable to update WarehouseReceipt", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSERECEIPT_UNABLE_TO_DELETE(7005, "Unable to delete WarehouseReceipt", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field WarehouseReceipt errors
-        WAREHOUSERECEIPT_INVALID_QUANTITY(7101, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        WAREHOUSERECEIPT_INVALID_TOTALPRICE(7102, "Invalid total price", HttpStatus.BAD_REQUEST),
-        WAREHOUSERECEIPT_INVALID_DATE(7103, "Invalid date", HttpStatus.BAD_REQUEST),
-    // WarehouseReceiptDetail-related errors
-    WAREHOUSERECEIPTDETAIL_NOT_FOUND(8001, "WarehouseReceiptDetail not found", HttpStatus.NOT_FOUND),
-    WAREHOUSERECEIPTDETAIL_ALREADY_EXISTS(8002, "WarehouseReceiptDetail already exists", HttpStatus.CONFLICT),
-    WAREHOUSERECEIPTDETAIL_UNABLE_TO_SAVE(8003, "Unable to save WarehouseReceiptDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSERECEIPTDETAIL_UNABLE_TO_UPDATE(8004, "Unable to update WarehouseReceiptDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    WAREHOUSERECEIPTDETAIL_UNABLE_TO_DELETE(8005, "Unable to delete WarehouseReceiptDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field WarehouseReceiptDetail errors
-        WAREHOUSERECEIPTDETAIL_INVALID_QUANTITY(8101, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        WAREHOUSERECEIPTDETAIL_INVALID_UNITPRICE(8102, "Invalid unit price", HttpStatus.BAD_REQUEST),
-        WAREHOUSERECEIPTDETAIL_INVALID_TOTALPRICE(8103, "Invalid total price", HttpStatus.BAD_REQUEST),
-    // Voucher-related errors
-    VOUCHER_NOT_FOUND(9001, "Voucher not found", HttpStatus.NOT_FOUND),
-    VOUCHER_ALREADY_EXISTS(9002, "Voucher already exists", HttpStatus.CONFLICT),
-    VOUCHER_UNABLE_TO_SAVE(9003, "Unable to save voucher", HttpStatus.INTERNAL_SERVER_ERROR),
-    VOUCHER_UNABLE_TO_UPDATE(9004, "Unable to update voucher", HttpStatus.INTERNAL_SERVER_ERROR),
-    VOUCHER_UNABLE_TO_DELETE(9005, "Unable to delete voucher", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Voucher errors
-        VOUCHER_INVALID_NAME(9101, "Invalid voucher name", HttpStatus.BAD_REQUEST),
-        VOUCHER_INVALID_PERCENT(9102, "Invalid voucher percent", HttpStatus.BAD_REQUEST),
-        VOUCHER_INVALID_START_DATE(9103, "Invalid voucher start date", HttpStatus.BAD_REQUEST),
-        VOUCHER_INVALID_END_DATE(9104, "Invalid voucher end date", HttpStatus.BAD_REQUEST),
-        VOUCHER_INVALID_PRODUCTS(9105, "Invalid products associated with voucher", HttpStatus.BAD_REQUEST),
-        VOUCHER_INVALID_USERS(9106, "Invalid users associated with voucher", HttpStatus.BAD_REQUEST),
-    // Address-related errors
-    ADDRESS_NOT_FOUND(10001, "Address not found", HttpStatus.NOT_FOUND),
-    ADDRESS_ALREADY_EXISTS(10002, "Address already exists", HttpStatus.CONFLICT),
-    ADDRESS_UNABLE_TO_SAVE(10003, "Unable to save address", HttpStatus.INTERNAL_SERVER_ERROR),
-    ADDRESS_UNABLE_TO_UPDATE(10004, "Unable to update address", HttpStatus.INTERNAL_SERVER_ERROR),
-    ADDRESS_UNABLE_TO_DELETE(10005, "Unable to delete address", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Address errors
-        ADDRESS_INVALID_ADDRESS(10101, "Invalid address", HttpStatus.BAD_REQUEST),
-        ADDRESS_INVALID_PHONE(10102, "Invalid phone number", HttpStatus.BAD_REQUEST),
-    // Orders-related errors
-    ORDERS_NOT_FOUND(11001, "Order not found", HttpStatus.NOT_FOUND),
-    ORDERS_ALREADY_EXISTS(11002, "Order already exists", HttpStatus.CONFLICT),
-    ORDERS_UNABLE_TO_SAVE(11003, "Unable to save order", HttpStatus.INTERNAL_SERVER_ERROR),
-    ORDERS_UNABLE_TO_UPDATE(11004, "Unable to update order", HttpStatus.INTERNAL_SERVER_ERROR),
-    ORDERS_UNABLE_TO_DELETE(11005, "Unable to delete order", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Orders errors
-        ORDERS_INVALID_USER(11101, "Invalid user associated with order", HttpStatus.BAD_REQUEST),
-        ORDERS_INVALID_QUANTITY(11102, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        ORDERS_INVALID_TOTAL_PRICE(11103, "Invalid total price", HttpStatus.BAD_REQUEST),
-        ORDERS_INVALID_ADDRESS(11104, "Invalid address associated with order", HttpStatus.BAD_REQUEST),
-    // OrderDetail-related errors
-    ORDERDETAIL_NOT_FOUND(12001, "OrderDetail not found", HttpStatus.NOT_FOUND),
-    ORDERDETAIL_ALREADY_EXISTS(12002, "OrderDetail already exists", HttpStatus.CONFLICT),
-    ORDERDETAIL_UNABLE_TO_SAVE(12003, "Unable to save OrderDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    ORDERDETAIL_UNABLE_TO_UPDATE(12004, "Unable to update OrderDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    ORDERDETAIL_UNABLE_TO_DELETE(12005, "Unable to delete OrderDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field OrderDetail errors
-        ORDERDETAIL_INVALID_ORDER(12101, "Invalid order associated with OrderDetail", HttpStatus.BAD_REQUEST),
-        ORDERDETAIL_INVALID_PRODUCT(12102, "Invalid product associated with OrderDetail", HttpStatus.BAD_REQUEST),
-        ORDERDETAIL_INVALID_QUANTITY(12103, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        ORDERDETAIL_INVALID_UNIT_PRICE(12104, "Invalid unit price", HttpStatus.BAD_REQUEST),
-        ORDERDETAIL_INVALID_TOTAL_PRICE(12105, "Invalid total price", HttpStatus.BAD_REQUEST),
-        ORDERDETAIL_INVALID_PRODUCTSALE(12106, "Quantity Long to Quantity product sale ", HttpStatus.BAD_REQUEST),
-    // Invoice-related errors
-    INVOICE_NOT_FOUND(13001, "Invoice not found", HttpStatus.NOT_FOUND),
-    INVOICE_ALREADY_EXISTS(13002, "Invoice already exists", HttpStatus.CONFLICT),
-    INVOICE_UNABLE_TO_SAVE(13003, "Unable to save invoice", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVOICE_UNABLE_TO_UPDATE(13004, "Unable to update invoice", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVOICE_UNABLE_TO_DELETE(13005, "Unable to delete invoice", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Invoice errors
-        INVOICE_INVALID_USER(13101, "Invalid user associated with invoice", HttpStatus.BAD_REQUEST),
-        INVOICE_INVALID_QUANTITY(13102, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        INVOICE_INVALID_TOTAL_PRICE(13103, "Invalid total price", HttpStatus.BAD_REQUEST),
-        INVOICE_INVALID_ADDRESS(13104, "Invalid address associated with invoice", HttpStatus.BAD_REQUEST),
-    // InvoiceDetail-related errors
-    INVOICEDETAIL_NOT_FOUND(14001, "InvoiceDetail not found", HttpStatus.NOT_FOUND),
-    INVOICEDETAIL_ALREADY_EXISTS(14002, "InvoiceDetail already exists", HttpStatus.CONFLICT),
-    INVOICEDETAIL_UNABLE_TO_SAVE(14003, "Unable to save InvoiceDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVOICEDETAIL_UNABLE_TO_UPDATE(14004, "Unable to update InvoiceDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    INVOICEDETAIL_UNABLE_TO_DELETE(14005, "Unable to delete InvoiceDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field InvoiceDetail errors
-        INVOICEDETAIL_INVALID_INVOICE(14101, "Invalid invoice associated with InvoiceDetail", HttpStatus.BAD_REQUEST),
-        INVOICEDETAIL_INVALID_PRODUCT(14102, "Invalid product associated with InvoiceDetail", HttpStatus.BAD_REQUEST),
-        INVOICEDETAIL_INVALID_QUANTITY(14103, "Invalid quantity", HttpStatus.BAD_REQUEST),
-        INVOICEDETAIL_INVALID_UNIT_PRICE(14104, "Invalid unit price", HttpStatus.BAD_REQUEST),
-        INVOICEDETAIL_INVALID_TOTAL_PRICE(14105, "Invalid total price", HttpStatus.BAD_REQUEST),
-    // Cart-related errors
-    CART_NOT_FOUND(15001, "Cart not found", HttpStatus.NOT_FOUND),
-    CART_ALREADY_EXISTS(15002, "Cart already exists", HttpStatus.CONFLICT),
-    CART_UNABLE_TO_SAVE(15003, "Unable to save cart", HttpStatus.INTERNAL_SERVER_ERROR),
-    CART_UNABLE_TO_UPDATE(15004, "Unable to update cart", HttpStatus.INTERNAL_SERVER_ERROR),
-    CART_UNABLE_TO_DELETE(15005, "Unable to delete cart", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field Cart errors
-        CART_INVALID_USER(15101, "Invalid user associated with cart", HttpStatus.BAD_REQUEST),
-        CART_INVALID_QUANTITY(15102, "Invalid quantity", HttpStatus.BAD_REQUEST),
-    // CartDetail-related errors
-    CARTDETAIL_NOT_FOUND(16001, "CartDetail not found", HttpStatus.NOT_FOUND),
-    CARTDETAIL_ALREADY_EXISTS(16002, "CartDetail already exists", HttpStatus.CONFLICT),
-    CARTDETAIL_UNABLE_TO_SAVE(16003, "Unable to save CartDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    CARTDETAIL_UNABLE_TO_UPDATE(16004, "Unable to update CartDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-    CARTDETAIL_UNABLE_TO_DELETE(16005, "Unable to delete CartDetail", HttpStatus.INTERNAL_SERVER_ERROR),
-        // Field CartDetail errors
-        CARTDETAIL_INVALID_PRODUCTSALE(16101, "Invalid ProductSale associated with CartDetail", HttpStatus.BAD_REQUEST),
-        CARTDETAIL_INVALID_CART(16102, "Invalid cart associated with CartDetail", HttpStatus.BAD_REQUEST),
-        CARTDETAIL_INVALID_QUANTITY(16103, "Invalid quantity", HttpStatus.BAD_REQUEST),
+
+    //TaiKhoan-related errors
+    TAIKHOAN_NOT_FOUND(1001, "Tài khoản không tìm thấy", HttpStatus.NOT_FOUND),
+    TAIKHOAN_ALREADY_EXISTS(1002, "Tài khoản đã tồn tại", HttpStatus.CONFLICT),
+    TAIKHOAN_UNABLE_TO_SAVE(1003, "Không thể lưu tài khoản", HttpStatus.INTERNAL_SERVER_ERROR),
+    TAIKHOAN_UNABLE_TO_UPDATE(1004, "Không thể cập nhật tài khoản", HttpStatus.INTERNAL_SERVER_ERROR),
+    TAIKHOAN_UNABLE_TO_DELETE(1005, "Không thể xóa tài khoản", HttpStatus.INTERNAL_SERVER_ERROR),
+    ACCOUNT_LOCKED(1006,"Tài khoản đã bị khóa",HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field TaiKhoan error
+    TAIKHOAN_INVALID_USERNAME(1101, "Tên đăng nhập không hợp lệ", HttpStatus.BAD_REQUEST),
+    TAIKHOAN_INVALID_PASSWORD(1102, "Mật khẩu không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //NhanVien-related errors
+    NHANVIEN_NOT_FOUND(2001, "Nhân viên không tìm thấy", HttpStatus.NOT_FOUND),
+    NHANVIEN_ALREADY_EXISTS(2002, "Nhân viên đã tồn tại", HttpStatus.CONFLICT),
+    NHANVIEN_UNABLE_TO_SAVE(2003, "Không thể lưu nhân viên", HttpStatus.INTERNAL_SERVER_ERROR),
+    NHANVIEN_UNABLE_TO_UPDATE(2004, "Không thể cập nhật nhân viên", HttpStatus.INTERNAL_SERVER_ERROR),
+    NHANVIEN_UNABLE_TO_DELETE(2005, "Không thể xóa nhân viên", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field NhanVien error
+    NHANVIEN_INVALID_NAME(2101, "Tên nhân viên không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_EMAIL(2102, "Email không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_PHONE(2103, "Số điện thoại không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_ADDRESS(2104, "Địa chỉ không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_BIRTH_DATE(2105, "Ngày sinh không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_GENDER(2106, "Giới tính không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_COMMISSION(2107, "Tỉ lệ hoa hồng không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_HOURLY_WAGE(2108, "Lương theo giờ không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHANVIEN_INVALID_POSITION(2109, "Chức vụ không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //Role-related errors
+    ROLE_NOT_FOUND(3001, "Vai trò không tìm thấy", HttpStatus.NOT_FOUND),
+    ROLE_ALREADY_EXISTS(3002, "Vai trò đã tồn tại", HttpStatus.CONFLICT),
+    ROLE_UNABLE_TO_SAVE(3003, "Không thể lưu vai trò", HttpStatus.INTERNAL_SERVER_ERROR),
+    ROLE_UNABLE_TO_UPDATE(3004, "Không thể cập nhật vai trò", HttpStatus.INTERNAL_SERVER_ERROR),
+    ROLE_UNABLE_TO_DELETE(3005, "Không thể xóa vai trò", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field Role error
+    ROLE_INVALID_ROLE(3101, "Tên vai trò không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //CuaHang-related errors
+    CUAHANG_NOT_FOUND(4001, "Cửa hàng không tìm thấy", HttpStatus.NOT_FOUND),
+    CUAHANG_ALREADY_EXISTS(4002, "Cửa hàng đã tồn tại", HttpStatus.CONFLICT),
+    CUAHANG_UNABLE_TO_SAVE(4003, "Không thể lưu cửa hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    CUAHANG_UNABLE_TO_UPDATE(4004, "Không thể cập nhật cửa hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    CUAHANG_UNABLE_TO_DELETE(4005, "Không thể xóa cửa hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field CuaHang error
+    CUAHANG_INVALID_NAME(4101, "Tên cửa hàng không hợp lệ", HttpStatus.BAD_REQUEST),
+    CUAHANG_INVALID_ADDRESS(4102, "Địa chỉ cửa hàng không hợp lệ", HttpStatus.BAD_REQUEST),
+    CUAHANG_INVALID_MANAGER(4103, "Mã quản lý không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //Kho-related errors
+    KHO_NOT_FOUND(5001, "Kho không tìm thấy", HttpStatus.NOT_FOUND),
+    KHO_ALREADY_EXISTS(5002, "Kho đã tồn tại", HttpStatus.CONFLICT),
+    KHO_UNABLE_TO_SAVE(5003, "Không thể lưu kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    KHO_UNABLE_TO_UPDATE(5004, "Không thể cập nhật kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    KHO_UNABLE_TO_DELETE(5005, "Không thể xóa kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field Kho error
+    KHO_INVALID_NAME(5101, "Tên kho không hợp lệ", HttpStatus.BAD_REQUEST),
+    KHO_INVALID_ADDRESS(5102, "Địa chỉ kho không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //TonKho-related errors
+    TONKHO_NOT_FOUND(6001, "Tồn kho không tìm thấy", HttpStatus.NOT_FOUND),
+    TONKHO_ALREADY_EXISTS(6002, "Tồn kho đã tồn tại", HttpStatus.CONFLICT),
+    TONKHO_UNABLE_TO_SAVE(6003, "Không thể lưu tồn kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    TONKHO_UNABLE_TO_UPDATE(6004, "Không thể cập nhật tồn kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    TONKHO_UNABLE_TO_DELETE(6005, "Không thể xóa tồn kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field TonKho error
+    TONKHO_INVALID_QUANTITY(6101, "Số lượng tồn kho không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //SanPham-related errors
+    SANPHAM_NOT_FOUND(7001, "Sản phẩm không tìm thấy", HttpStatus.NOT_FOUND),
+    SANPHAM_ALREADY_EXISTS(7002, "Sản phẩm đã tồn tại", HttpStatus.CONFLICT),
+    SANPHAM_UNABLE_TO_SAVE(7003, "Không thể lưu sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    SANPHAM_UNABLE_TO_UPDATE(7004, "Không thể cập nhật sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    SANPHAM_UNABLE_TO_DELETE(7005, "Không thể xóa sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field SanPham error
+    SANPHAM_INVALID_NAME(7101, "Tên sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+    SANPHAM_INVALID_DESCRIPTION(7102, "Mô tả sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+    SANPHAM_INVALID_PRICE(7103, "Giá sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+    SANPHAM_INVALID_STATUS(7104, "Trạng thái sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+    SANPHAM_INVALID_GENDER(7105, "Giới tính của sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+    SANPHAM_INVALID_IMAGE(7106, "Hình ảnh sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //LoaiSanPham-related errors
+    LOAISANPHAM_NOT_FOUND(8001, "Loại sản phẩm không tìm thấy", HttpStatus.NOT_FOUND),
+    LOAISANPHAM_ALREADY_EXISTS(8002, "Loại sản phẩm đã tồn tại", HttpStatus.CONFLICT),
+    LOAISANPHAM_UNABLE_TO_SAVE(8003, "Không thể lưu loại sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    LOAISANPHAM_UNABLE_TO_UPDATE(8004, "Không thể cập nhật loại sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    LOAISANPHAM_UNABLE_TO_DELETE(8005, "Không thể xóa loại sản phẩm", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field LoaiSanPham error
+    LOAISANPHAM_INVALID_NAME(8101, "Tên loại sản phẩm không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //Size-related errors
+    SIZE_NOT_FOUND(9001, "Size không tìm thấy", HttpStatus.NOT_FOUND),
+    SIZE_ALREADY_EXISTS(9002, "Size đã tồn tại", HttpStatus.CONFLICT),
+    SIZE_UNABLE_TO_SAVE(9003, "Không thể lưu size", HttpStatus.INTERNAL_SERVER_ERROR),
+    SIZE_UNABLE_TO_UPDATE(9004, "Không thể cập nhật size", HttpStatus.INTERNAL_SERVER_ERROR),
+    SIZE_UNABLE_TO_DELETE(9005, "Không thể xóa size", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field Size error
+    SIZE_INVALID_VALUE(9101, "Giá trị size không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //Image-related errors
+    IMAGE_NOT_FOUND(10001, "Hình ảnh không tìm thấy", HttpStatus.NOT_FOUND),
+    IMAGE_ALREADY_EXISTS(10002, "Hình ảnh đã tồn tại", HttpStatus.CONFLICT),
+    IMAGE_UNABLE_TO_SAVE(10003, "Không thể lưu hình ảnh", HttpStatus.INTERNAL_SERVER_ERROR),
+    IMAGE_UNABLE_TO_UPDATE(10004, "Không thể cập nhật hình ảnh", HttpStatus.INTERNAL_SERVER_ERROR),
+    IMAGE_UNABLE_TO_DELETE(10005, "Không thể xóa hình ảnh", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field Image error
+    IMAGE_INVALID_URL(10101, "URL hình ảnh không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //NhaCungCap-related errors
+    NHACUNGCAP_NOT_FOUND(11001, "Nhà cung cấp không tìm thấy", HttpStatus.NOT_FOUND),
+    NHACUNGCAP_ALREADY_EXISTS(11002, "Nhà cung cấp đã tồn tại", HttpStatus.CONFLICT),
+    NHACUNGCAP_UNABLE_TO_SAVE(11003, "Không thể lưu nhà cung cấp", HttpStatus.INTERNAL_SERVER_ERROR),
+    NHACUNGCAP_UNABLE_TO_UPDATE(11004, "Không thể cập nhật nhà cung cấp", HttpStatus.INTERNAL_SERVER_ERROR),
+    NHACUNGCAP_UNABLE_TO_DELETE(11005, "Không thể xóa nhà cung cấp", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field NhaCungCap error
+    NHACUNGCAP_INVALID_NAME(11101, "Tên nhà cung cấp không hợp lệ", HttpStatus.BAD_REQUEST),
+    NHACUNGCAP_INVALID_PHONE(11102, "Số điện thoại không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //PhieuNhapKho-related errors
+    PHIEUNHAPKHO_NOT_FOUND(12001, "Phiếu nhập kho không tìm thấy", HttpStatus.NOT_FOUND),
+    PHIEUNHAPKHO_ALREADY_EXISTS(12002, "Phiếu nhập kho đã tồn tại", HttpStatus.CONFLICT),
+    PHIEUNHAPKHO_UNABLE_TO_SAVE(12003, "Không thể lưu phiếu nhập kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    PHIEUNHAPKHO_UNABLE_TO_UPDATE(12004, "Không thể cập nhật phiếu nhập kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    PHIEUNHAPKHO_UNABLE_TO_DELETE(12005, "Không thể xóa phiếu nhập kho", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field PhieuNhapKho error
+    PHIEUNHAPKHO_INVALID_TOTAL_PRICE(12101, "Tổng giá nhập không hợp lệ", HttpStatus.BAD_REQUEST),
+    PHIEUNHAPKHO_INVALID_DATE(12102, "Thời gian nhập không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //ChiTietPhieuNhap-related errors
+    CHITIETPHIEUNHAP_NOT_FOUND(13001, "Chi tiết phiếu nhập không tìm thấy", HttpStatus.NOT_FOUND),
+    CHITIETPHIEUNHAP_ALREADY_EXISTS(13002, "Chi tiết phiếu nhập đã tồn tại", HttpStatus.CONFLICT),
+    CHITIETPHIEUNHAP_UNABLE_TO_SAVE(13003, "Không thể lưu chi tiết phiếu nhập", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHITIETPHIEUNHAP_UNABLE_TO_UPDATE(13004, "Không thể cập nhật chi tiết phiếu nhập", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHITIETPHIEUNHAP_UNABLE_TO_DELETE(13005, "Không thể xóa chi tiết phiếu nhập", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field ChiTietPhieuNhap error
+    CHITIETPHIEUNHAP_INVALID_QUANTITY(13101, "Số lượng không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHITIETPHIEUNHAP_INVALID_IMPORT_PRICE(13102, "Giá nhập không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHITIETPHIEUNHAP_INVALID_SELLING_PRICE(13103, "Giá bán không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //DonHang-related errors
+    DONHANG_NOT_FOUND(14001, "Đơn hàng không tìm thấy", HttpStatus.NOT_FOUND),
+    DONHANG_ALREADY_EXISTS(14002, "Đơn hàng đã tồn tại", HttpStatus.CONFLICT),
+    DONHANG_UNABLE_TO_SAVE(14003, "Không thể lưu đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    DONHANG_UNABLE_TO_UPDATE(14004, "Không thể cập nhật đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    DONHANG_UNABLE_TO_DELETE(14005, "Không thể xóa đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field DonHang error
+    DONHANG_INVALID_DATE(14101, "Thời gian bán không hợp lệ", HttpStatus.BAD_REQUEST),
+    DONHANG_INVALID_TOTAL_VALUE(14102, "Tổng giá trị không hợp lệ", HttpStatus.BAD_REQUEST),
+    DONHANG_INVALID_DISCOUNT(14103, "Giá giảm không hợp lệ", HttpStatus.BAD_REQUEST),
+    DONHANG_INVALID_STATUS(14104, "Trạng thái không hợp lệ", HttpStatus.BAD_REQUEST),
+    DONHANG_INVALID_PAYMENT_METHOD(14105, "Phương thức thanh toán không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //ChiTietDonHang-related errors
+    CHITIETDONHANG_NOT_FOUND(15001, "Chi tiết đơn hàng không tìm thấy", HttpStatus.NOT_FOUND),
+    CHITIETDONHANG_ALREADY_EXISTS(15002, "Chi tiết đơn hàng đã tồn tại", HttpStatus.CONFLICT),
+    CHITIETDONHANG_UNABLE_TO_SAVE(15003, "Không thể lưu chi tiết đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHITIETDONHANG_UNABLE_TO_UPDATE(15004, "Không thể cập nhật chi tiết đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHITIETDONHANG_UNABLE_TO_DELETE(15005, "Không thể xóa chi tiết đơn hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field ChiTietDonHang error
+    CHITIETDONHANG_INVALID_QUANTITY(15101, "Số lượng không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHITIETDONHANG_INVALID_PRICE(15102, "Đơn giá không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //GioHang-related errors
+    GIOHANG_NOT_FOUND(16001, "Giỏ hàng không tìm thấy", HttpStatus.NOT_FOUND),
+    GIOHANG_ALREADY_EXISTS(16002, "Giỏ hàng đã tồn tại", HttpStatus.CONFLICT),
+    GIOHANG_UNABLE_TO_SAVE(16003, "Không thể lưu giỏ hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    GIOHANG_UNABLE_TO_UPDATE(16004, "Không thể cập nhật giỏ hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    GIOHANG_UNABLE_TO_DELETE(16005, "Không thể xóa giỏ hàng", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field GioHang error
+    GIOHANG_INVALID_QUANTITY(16101, "Số lượng không hợp lệ", HttpStatus.BAD_REQUEST),
+    GIOHANG_INVALID_PRICE(16102, "Đơn giá không hợp lệ", HttpStatus.BAD_REQUEST),
+    GIOHANG_INVALID_TOTAL(16103, "Tổng cộng không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //ChamCong-related errors
+    CHAMCONG_NOT_FOUND(17001, "Chấm công không tìm thấy", HttpStatus.NOT_FOUND),
+    CHAMCONG_ALREADY_EXISTS(17002, "Chấm công đã tồn tại", HttpStatus.CONFLICT),
+    CHAMCONG_UNABLE_TO_SAVE(17003, "Không thể lưu chấm công", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHAMCONG_UNABLE_TO_UPDATE(17004, "Không thể cập nhật chấm công", HttpStatus.INTERNAL_SERVER_ERROR),
+    CHAMCONG_UNABLE_TO_DELETE(17005, "Không thể xóa chấm công", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field ChamCong error
+    CHAMCONG_INVALID_CHECK_IN_TIME(17101, "Thời gian vào không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHAMCONG_INVALID_CHECK_OUT_TIME(17102, "Thời gian ra không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHAMCONG_INVALID_WORKING_HOURS(17103, "Tổng giờ làm không hợp lệ", HttpStatus.BAD_REQUEST),
+    CHAMCONG_INVALID_STATUS(17104, "Trạng thái không hợp lệ", HttpStatus.BAD_REQUEST),
+
+    //BangLuong-related errors
+    BANGLUONG_NOT_FOUND(18001, "Bảng lương không tìm thấy", HttpStatus.NOT_FOUND),
+    BANGLUONG_ALREADY_EXISTS(18002, "Bảng lương đã tồn tại", HttpStatus.CONFLICT),
+    BANGLUONG_UNABLE_TO_SAVE(18003, "Không thể lưu bảng lương", HttpStatus.INTERNAL_SERVER_ERROR),
+    BANGLUONG_UNABLE_TO_UPDATE(18004, "Không thể cập nhật bảng lương", HttpStatus.INTERNAL_SERVER_ERROR),
+    BANGLUONG_UNABLE_TO_DELETE(18005, "Không thể xóa bảng lương", HttpStatus.INTERNAL_SERVER_ERROR),
+    //Field BangLuong error
+    BANGLUONG_INVALID_MONTH(18101, "Tháng tính lương không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_YEAR(18102, "Năm tính lương không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_BASE_SALARY(18103, "Lương cơ bản không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_NET_SALARY(18104, "Thực nhận không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_COMMISSION(18105, "Tổng hoa hồng không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_WORKING_HOURS(18106, "Tổng giờ làm không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_SALARY_PERIOD(18107, "Quý tính lương không hợp lệ", HttpStatus.BAD_REQUEST),
+    BANGLUONG_INVALID_DEDUCTION(18108, "Khấu trừ không hợp lệ", HttpStatus.BAD_REQUEST),
+
     //Jwt token-related error
-    JWT_INVALID(1101, "Invalid JWT token", HttpStatus.UNAUTHORIZED),
-    JWT_EXPIRED(1102, "JWT token expired", HttpStatus.UNAUTHORIZED),
-    JWT_MALFORMED(1103, "Malformed JWT token", HttpStatus.UNAUTHORIZED),
+    JWT_INVALID(19001, "JWT token không hợp lệ", HttpStatus.UNAUTHORIZED),
+    JWT_EXPIRED(19002, "JWT token đã hết hạn", HttpStatus.UNAUTHORIZED),
+    JWT_MALFORMED(19003, "JWT token bị sai định dạng", HttpStatus.UNAUTHORIZED),
     ;
 
     private final int code;
